@@ -1,0 +1,25 @@
+\begin{thebibliography}{2}
+\newcommand{\enquote}[1]{``#1''}
+\providecommand{\natexlab}[1]{#1}
+\providecommand{\url}[1]{\texttt{#1}}
+\providecommand{\urlprefix}{URL }
+\expandafter\ifx\csname urlstyle\endcsname\relax
+  \providecommand{\doi}[1]{doi:\discretionary{}{}{}#1}\else
+  \providecommand{\doi}{doi:\discretionary{}{}{}\begingroup
+  \urlstyle{rm}\Url}\fi
+\providecommand{\eprint}[2][]{\url{#2}}
+
+\bibitem[{McCullagh and Nelder(1989)}]{mccullagh1989generalized}
+McCullagh P, Nelder JA (1989).
+\newblock \enquote{Generalized linear models. Monographs on Statistics and
+  Applied Probability 37.}
+\newblock \emph{Chapman Hall, London}.
+
+\bibitem[{Ortiz and Arocha(2004)}]{ortiz2004alternative}
+Ortiz M, Arocha F (2004).
+\newblock \enquote{Alternative error distribution models for standardization of
+  catch rates of non-target species from a pelagic longline fishery: billfish
+  species in the Venezuelan tuna longline fishery.}
+\newblock \emph{Fisheries Research}, \textbf{70}(2), 275--297.
+
+\end{thebibliography}
