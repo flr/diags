@@ -1,0 +1,135 @@
+% diags.Rnw --
+%
+% Author: laurence kell <lauriekell@gmail.com>
+
+%\VignetteIndexEntry{cpue}
+%\VignetteIndexEntry{An R Package for read/wrting CPUE files and plotting data from a variety of fish stock assessment programs}
+%\VignetteKeyword{CPUE, diagnostics, IO, read, write}
+
+
+\documentclass[shortnames,nojss,article]{jss}
+
+\usepackage[onehalfspacing]{setspace}
+\usepackage{natbib} \bibliographystyle{plain}
+\usepackage{graphicx, psfrag, Sweave}
+\usepackage{enumerate}
+
+\usepackage{booktabs,flafter} %,thumbpdf}
+\usepackage{hyperref}
+
+%\newcommand{\code}[1]{\texttt{#1}}
+%\newcommand{\proglang}[1]{\textsf{#1}}
+%\newcommand{\pkg}[1]{{\fontseries{b}\selectfont #1}}
+
+\author{Laurence Kell\\ICCAT}
+\Plainauthor{Laurence Kell}
+
+\title{\pkg{diags}: \proglang{R} Tools for Catch per Unit Effort Analysis}
+\Plaintitle{diags: R Tools for Catch per Unit Effort Analysis}
+
+\Abstract{The \pkg{diags} package provides methods for plotting and summarising Catch per Unit Effort (CPUE) data used in fitting fish stock assessment methods. Programs for stock assessment are generally implemented as  standalone executable programs with their own text files for input and output files. \pkg{diags} provides a set of methods for reading these data and the results from fitting them nto R.}
+
+\Keywords{\proglang{R}, CPUE, diagnsotics, residuals, stock assessment}
+\Plainkeywords{R, CPUE, diagnsotics, residuals,  stock assessment}
+
+\Address{
+  Laurence Kell \\
+  ICCAT Secretariat\\ 
+  C/Coraz\'{o}n de Mar\'{\i}a, 8. \\
+  28002 Madrid\\
+  Spain\\ 
+  
+  E-mail: \email{Laurie.Kell@iccat.int}
+}
+
+%% need no \usepackage{Sweave.sty}
+
+
+
+
+\begin{document}
+\input{diags-concordance}
+
+\tableofcontents
+\newpage 
+
+\section{introduction}
+
+The \pkg{diags} package provides methods for plotting and summarising Catch per Unit Effort (CPUE) data used in fitting fish stock assessment methods. Programs for stock assessment are generally implemented as  standalone executable programs with their own text files for input and output files. \pkg{diags} provides a set of methods for reading these data and the results from fitting them nto R.
+
+The stock assessment package for which there are R methods for reading text files are
+
+\begin{itemize}
+ \item \href{http://iccat.int/en/AssessCatalog.htm}{ASPIC} a biomass dynamic model fitted by maximising the likelihood 
+ \item \href{http://iccat.int/en/AssessCatalog.htm}{BSP}  a Bayesian biomass dynamic model fitted using the SIR algorithm
+ \item \href{http://www.ices.dk/committe/acom/wg/asoft/VPA/}{VPA Suite} Imput file format mainly used by ICES for virtual population analysis
+ \item \href{http://iccat.int/en/AssessCatalog.htm}{VPA2Box} An age structured model based on virtual population analysis
+ \item \href{http://www.multifan-cl.org}{Multifan-CL} A statistical, length-based, age-structured model
+ \item \href{http://nft.nefsc.noaa.gov/Stock_Synthesis_3.htm}{Stock Synthesis} age and size structure assessment model
+\end{itemize}
+
+
+\section{Data}
+
+The \code{readCpue} method reads data from the various stock assessment files into a commom data frame.
+There is an example data frame in the package
+
+\begin{Schunk}
+\begin{Sinput}
+> library(diags)
+> data(rsdl)
+> head(rsdl)
+\end{Sinput}
+\begin{Soutput}
+   year        name  obs  hat residual residualLag   qqx   qqy qqHat
+12 1967 Japan LL II 0.25 0.19     0.26        0.28  0.69  0.26  0.27
+13 1968 Japan LL II 0.26 0.19     0.28        0.38  0.77  0.28  0.29
+14 1969 Japan LL II 0.27 0.19     0.38        0.12  1.57  0.38  0.57
+15 1970 Japan LL II 0.21 0.18     0.12        0.13  0.24  0.12  0.11
+16 1971 Japan LL II 0.21 0.18     0.13       -0.20  0.36  0.13  0.15
+17 1972 Japan LL II 0.14 0.18    -0.20       -0.30 -0.62 -0.20 -0.19
+\end{Soutput}
+\end{Schunk}
+
+The columns identify the observations (\code{year,name} and may include other covariates such as age, season, etc.), the original observations (\code{obs}) and the fitted values and the residuals (\code{obs,hat}) if \code{diags} has been used to read in the data, the residuals with a lag
+of 1 (\code{residualLag}) and the quanitiles (\code{qqx,qqy,qqHat}) assumming a normal distribution.
+
+In some assessment packages the data are in a specific file in other cases the data are in a suite of files found in a dir. Therefore the \code{readCpue} takes either a file or a dir as irs first arguemnt depending on the assessment method e.g. reading in from vpa2box and SS
+
+
+\begin{table}\caption{plot}\begin{tabular}{|l|p{12cm}|} 
+\hline\multicolumn{2}{|c|}{Syntax} \\
+\hline 
+x       & \code{vector} values of one variable of interest \\ 
+data   	& \code{data.frame} other variables\\ 
+geom		& \code{ggplot object} that sets the type of plot to construct, i.e. \code{point, line, histogram}. \\ 
+\hline 
+\end{tabular}\end{table}
+Creating a scatter plot is therefore very similar to how it is done using base R, i.e.
+
+
+\begin{Schunk}
+\begin{Sinput}
+> u2box=readCpue("unisex09.c01","2box")
+> uSS  =readCpue("myDir","ss")
+\end{Sinput}
+\end{Schunk}
+
+\code{readCpue} only reads in the data as input to a stock assessment, \code{diags} reads the residuals and and covariates as well.
+
+
+\begin{Schunk}
+\begin{Sinput}
+> u2box=readCpue("unisex09.c01","2box")
+> uSS  =readCpue("myDir","ss")
+\end{Sinput}
+\end{Schunk}
+
+There is also the \code{writeCpue} method  for writing the various input files
+
+\section{Transformations}
+
+For plotting and analysis the data may need to be transformed, e.g. observations scaled so that
+they can be compared, or pearson residuals computed. This can be done as required using \code{transform}
+and \code{plyr}, e.g. to standardise the residuals or scale them so that they lie between 0 and 1.
+
