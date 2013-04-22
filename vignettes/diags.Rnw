@@ -123,8 +123,8 @@ they can be compared, or pearson residuals computed. This can be done as require
 and \code{plyr}, e.g. to standardise the residuals or scale them so that they lie between 0 and 1.
 
 <<data,eval=FALSE,echo=TRUE,print=TRUE>>=
-stdz(  rnorm(10,1,.3)
-minMax(rnorm(10,1,.3)
+stdz(  rnorm(10,1,.3))
+minMax(rnorm(10,1,.3))
 @
 
 If you wish to scale the residuals within a series then the \pkg{plyr} can be used which implements the split-apply-combine strategy for \pkg{R} e.g.
