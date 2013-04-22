@@ -11,3 +11,6 @@ Encoding: ASCII
 
 RnwWeave: Sweave
 LaTeX: pdfLaTeX
+
+BuildType: Package
+PackageInstallArgs: --no-multiarch
