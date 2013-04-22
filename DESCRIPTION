@@ -50,3 +50,6 @@ Collate:
     'themes.R'
     'multiplot.R'
     'diags-glm.R'
+    'diags-aav.R'
+
+
