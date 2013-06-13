@@ -1,0 +1,22 @@
+model{
+  for(iind in 1:nindex){
+    for(iyr in 1:nyrs){
+       idx[iind,iyr]~dnorm(temp.mean[iind,iyr],temp.tau[iind,iyr])
+       temp.tau[iind,iyr]<-1/(sigma[iind]*sigma[iind]+log(cv[iind,iyr]+1))  
+       }
+    chi[iind]~dnorm(a,2)
+    }
+
+  for(iind in 1:nindex){
+    for(iyr in 1:nyrs){
+      temp.mean[iind,iyr]<-log(mu[iyr])+chi[iind]
+      }
+      sigma[iind]~dunif(0,5)
+    }
+
+  b<-log(100)
+  for(iyr in 1:nyrs) {  
+		nu[iyr]~dnorm(b,1)
+		mu[iyr]<-exp(nu[iyr])
+    }
+  }

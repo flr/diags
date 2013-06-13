@@ -51,4 +51,7 @@ Collate:
     'multiplot.R'
     'diags-glm.R'
     'diags-aav.R'
+    'diags-fget.R'
+    'diags-mcmc.R'
+    'ioICCAT.R'
 

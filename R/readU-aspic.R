@@ -65,7 +65,7 @@ iUAspic=function(x){
   cpue=transform(cpue,code=cde[as.numeric(id.)])
   
   cpue=adply(cpue,1,function(x)
-    with(x,switch(as.character(code),
+    with(x,switch(toupper(as.character(code)),
         CE=data.frame(index  =V3/V2,effort=V2, catch=V3),
         CC=data.frame(index  =V2,   catch =V3),
         B0=data.frame(biomass=V2),
