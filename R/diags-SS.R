@@ -4,15 +4,13 @@ utils::globalVariables(c("SS_output","FleetName","Yr","Obs","Exp","Dev","index",
 
 
 .diagUss=function(x){
-  #x="/home/laurie/Desktop/Dropbox/ICCAT/SCRS/ALB/2010/inputs/MFCL scenarios/2009_4B/plot-09.par.rep"
-  
   res=subset(SS_output(x)$cpue,select=c(FleetName,Yr,Obs,Exp,Dev), !is.na(Dev))
   names(res)=c("index","year","obs","hat","residual")
-  
-  
+   
   res=subset(ddply(res,.(index),diagsFn),!is.na(residual))
   names(res)[c(1,3)]=c("name","index")
-  }
+  
+  res}
 
 # 
 # if (FALSE){
