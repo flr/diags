@@ -4,7 +4,13 @@ utils::globalVariables(c("SS_output","FleetName","Yr","Obs","Exp","Dev","index",
 
 
 .diagUss=function(x){
-  res=subset(SS_output(x)$cpue,select=c(FleetName,Yr,Obs,Exp,Dev), !is.na(Dev))
+  res=subset(SS_output(x, forecast  =FALSE, 
+                          covar     =FALSE,
+                          checkcor  =FALSE,
+                          verbose   =FALSE, 
+                          printstats=FALSE, 
+                          hidewarn  =TRUE, 
+                          NoCompOK  =TRUE)$cpue,select=c(FleetName,Yr,Obs,Exp,Dev), !is.na(Dev))
   names(res)=c("index","year","obs","hat","residual")
    
   res=subset(ddply(res,.(index),diagsFn),!is.na(residual))
