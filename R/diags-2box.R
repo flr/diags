@@ -2,12 +2,12 @@
 .diagU2box<-function(x){
 
     tab5<-scan(x,what="",sep="\n")
-    tab5<-tab5[grep("TABLE 5.",tab5): length(tab5)]
+    tab5<-tab5[grep("TABLE 5.",tab5):length(tab5)]
 
     pos  <-grep("Chi-sq. discrepancy=",tab5)
     nms  <-substr(tab5[pos-7],9,30)
-    str  <-pos+4
-    end  <-grep("Selectivities",tab5)-1
+    str  <-pos+5
+    end  <-grep("Selectivities",tab5)-2
 
     fn<-function(uDiag) {
         uDiag<-unlist(strsplit(uDiag," "))

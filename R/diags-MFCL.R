@@ -5,8 +5,7 @@ utils::globalVariables(c("value.x"))
 utils::globalVariables(c("value.y"))
 utils::globalVariables(c("index"))
 utils::globalVariables(c("residual"))
-
-
+?
 scanText<-function(string, what = character(0), ...){
   ## Like scan() but reading from a vector of character strings
   tc <- textConnection(string)
