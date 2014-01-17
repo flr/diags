@@ -21,13 +21,13 @@ qqLine <- function(x,y){
 diagsFn=function(res){
       res$residualLag <- c(res$residual[-1],NA)
      
-      qq.     <- qqnorm(res$residual,plot.it=FALSE,na.rm=T)
+      try({qq.     <- qqnorm(res$residual,plot.it=FALSE,na.rm=T)
       res$qqx <- qq.$x
       res$qqy <- qq.$y
       
       qqpar <- qqLine(qq.$x,qq.$y)[c("a","b")]
 
-      res$qqHat=qqpar["a"]*res$qqx+qqpar["b"]
+      res$qqHat=qqpar["a"]*res$qqx+qqpar["b"]})
       
       res}
 #  

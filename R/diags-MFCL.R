@@ -18,6 +18,19 @@ getplotdat1<-function (h = "", plotrepfile, skip = 1) {
   recnum <- grep(h, dat)
   scanText(dat[recnum + skip], what = 0)}
 
+"getq" <-
+  function(plotrepfile="plot.rep"){
+    #==============================================================
+    # Data frame of catchabilities by fishery with times
+    #==============================================================
+    rtimes <- getrtimes(plotrepfile)
+    qq <- data.frame(time=sort(unique(unlist(rtimes))))
+    q <- getqlist(plotrepfile)
+    for(i in 1:length(q)) qq[[paste("flt",i,sep="")]] <-
+      q[[i]][match(qq$time,rtimes[[i]])]
+    qq
+  }
+
 
 getnfish <-
   function(plotrepfile="plot.rep"){
@@ -34,6 +47,44 @@ getnreal <-
     ###==============================================================
     getplotdat1(plotrepfile,h="# Number of realizations per fishery")
   }
+
+"getqlist" <-
+  function(plotrepfile="plot.rep"){
+    ##==============================================================
+    ## List of catchability vectors by fishery
+    ##==============================================================
+    dat <- getplotdat4("# Catchability by realization",plotrepfile)
+    nreal <- getnreal(plotrepfile)
+    nfish <- getnfish(plotrepfile)
+    splitter <- rep(seq(nfish), nreal)
+    split(dat, splitter)
+  }
+
+"getqed" <-
+  function(plotrepfile="plot.rep"){
+    #==============================================================
+    # Data frame of catchability+effort dev. by fishery with times
+    #==============================================================
+    rtimes <- getrtimes(plotrepfile)
+    qq <- data.frame(time=sort(unique(unlist(rtimes))))
+    q <- getqedlist(plotrepfile)
+    for(i in 1:length(q)) qq[[paste("flt",i,sep="")]] <-
+      q[[i]][match(qq$time,rtimes[[i]])]
+    qq
+  }
+
+"getqedlist" <-
+  function(plotrepfile="plot.rep"){
+    ##==============================================================
+    ## List of catchability+effort dev. vectors by fishery
+    ##==============================================================
+    dat <- getplotdat4("# Catch.+effort dev. by realization",plotrepfile)
+    nreal <- getnreal(plotrepfile)
+    nfish <- getnfish(plotrepfile)
+    splitter <- rep(seq(nfish), nreal)
+    split(dat, splitter)
+  }
+
 
 getplotdat4 <- function(h="",plotrepfile) {
   ##=================================================
@@ -342,12 +393,61 @@ datfromstr <-
   
   res=ddply(res,.(name),diagsFn)
   
-  devs=read.rep(x)$qEdevAtAge
-  devs=melt(t(devs))[,3]
-  devs=devs[!is.na(devs)]
+  flts=seq(getnfish(x))
+  qdata   <- getq(x)
+  qeddata <- getqed(x)
+  time    <- qdata$time
+  dE      <- log(qeddata/qdata)[,flts+1]
+  
+  #devs=read.rep(x)$qEdevAtAge
+  devs=cbind(year=time,melt(dE))
+  names(devs)[2]="name"
+  devs=devs[!is.na(devs$value),]
   res=data.frame(res,effDev=devs)
   
   res}
+
+
+mfclVcov=function(fileVar,fileCor){
+  ## get names of variables
+  ret      =list()
+  var      =scan(fileVar,what=as.character(),sep="\n")[-(1:3)]
+  
+  ## names
+  ret$names=unlist(lapply(var, function(x) strsplit(str_trim(x)," +")[[1]][4]))
+  ret$npar =length(ret$names)
+  
+  ## estimates
+  ret$hat=as.numeric(unlist(lapply(var, function(x) strsplit(str_trim(x)," +")[[1]][3])))
+  
+  ## std
+  ret$std=as.numeric(unlist(lapply(var, function(x) strsplit(str_trim(x)," +")[[1]][2])))
+  
+  ## cor
+  cor     =readLines(fileCor)
+  cor     =cor[seq(2,length(cor),2)+1]
+  cor     =str_trim(cor)
+  
+  corvec<-as.numeric(unlist(maply(cor, function(x) strsplit(x," +"))))
+  
+  ret$cor=matrix(NA, ret$npar, ret$npar) 
+  
+  ret$cor[upper.tri(ret$cor, diag=TRUE)]<-as.numeric(corvec) 
+  ret$cor[lower.tri(ret$cor)] <- t(ret$cor)[lower.tri(ret$cor)] 
+  ret$cov<-ret$cor*(ret$std%o%ret$std)
+  
+  ret$hat=FLPar(array(ret$hat, dim     =c(ret$npar,1),
+                      dimnames=list(params=ret$names,iter=1)))
+  ret$cor=FLPar(array(ret$cor, dim     =c(ret$npar,ret$npar,1),
+                      dimnames=list(params=ret$names,params=ret$names,iter=1)))
+  ret$cov=FLPar(array(ret$cov, dim     =c(ret$npar,ret$npar,1),
+                      dimnames=list(params=ret$names,params=ret$names,iter=1)))
+  
+  units(ret$cov)="NA"
+  units(ret$cor)="NA"
+  units(ret$hat)="NA"
+  
+  return(ret[c("hat","cor","cov")])}
 
 
 

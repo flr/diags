@@ -14,7 +14,7 @@ utils::globalVariables(c("SS_output","FleetName","Yr","Obs","Exp","Dev","index",
   names(res)=c("index","year","obs","hat","residual")
    
   res=subset(ddply(res,.(index),diagsFn),!is.na(residual))
-  names(res)[c(1,3)]=c("name","index")
+  names(res)[c(1,3)]=c("name","obs")
   
   res}
 

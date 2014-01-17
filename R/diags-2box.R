@@ -60,7 +60,7 @@
     uDiag$qqHat<-uDiag$qqx*par["a"]+par["b"]
     
     uDiag$name=str_trim(uDiag$name)
-    names(uDiag)[3]="index"
+    names(uDiag)[3]="obs"
     
     return(uDiag)}
   
