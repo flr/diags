@@ -14,7 +14,7 @@ stampIt=function(...){
                               Version=packageDescription(x)$Version,
                               Date   =packageDescription(x)$Date)})}
 
-smry=stampIt("ALKr")
+smry=stampIt("diags")
 
 
 ###################################################
@@ -49,7 +49,7 @@ qplot(dat$x,dat$y)
 
 
 ###################################################
-### code chunk number 7: diags.Rnw:190-194
+### code chunk number 7: diags.Rnw:177-181
 ###################################################
 library(diags)
 
@@ -85,7 +85,7 @@ head(rsdl)
 
 
 ###################################################
-### code chunk number 12: diags.Rnw:250-257
+### code chunk number 12: diags.Rnw:237-244
 ###################################################
 library(gam)
 gm  =gam(log(obs)~lo(year)+name,data=rsdl)
@@ -97,7 +97,7 @@ rsdl[is.na(rsdl$scl),"scl"]=0
 
 
 ###################################################
-### code chunk number 13: diags.Rnw:284-290
+### code chunk number 13: diags.Rnw:271-277
 ###################################################
 ggplot(rsdl)+ geom_line(aes(year,exp(gam)),col="red")  +
               geom_smooth(aes(year,obs),se=FALSE)      +           
@@ -108,7 +108,7 @@ ggplot(rsdl)+ geom_line(aes(year,exp(gam)),col="red")  +
 
 
 ###################################################
-### code chunk number 14: diags.Rnw:300-312
+### code chunk number 14: diags.Rnw:287-299
 ###################################################
 uMat=ddply(rsdl,.(name),transform, obs=stdz(obs))
 uMat=cast(uMat,year~name,value="obs")
@@ -125,7 +125,7 @@ pM+geom_hline(aes(yintercept=V1),data=mns,col="red") +
 
 
 ###################################################
-### code chunk number 15: diags.Rnw:324-330
+### code chunk number 15: diags.Rnw:311-317
 ###################################################
 cr=cor(uMat[,-1],use="pairwise.complete.obs")
 dimnames(cr)=list(gsub("_"," ",names(uMat)[-1]),gsub("_"," ",names(uMat)[-1]))
@@ -136,7 +136,7 @@ corrplot(cr,diag=F,order="hclust",addrect=2)  +
 
 
 ###################################################
-### code chunk number 16: diags.Rnw:342-347
+### code chunk number 16: diags.Rnw:329-334
 ###################################################
 ggplot(subset(rsdl,name %in% c("Japan LL II","Japan LL III","South Africa BB II")))+
              geom_point(aes(year,exp((gam+gamRsdl)-scl),col=name))+
@@ -146,7 +146,7 @@ ggplot(subset(rsdl,name %in% c("Japan LL II","Japan LL III","South Africa BB II"
 
 
 ###################################################
-### code chunk number 17: diags.Rnw:356-361
+### code chunk number 17: diags.Rnw:343-348
 ###################################################
     ggplot(subset(rsdl,name %in% c("South Africa BB I","South Africa BB II","Uruguay LL"))) +   
             geom_point(aes(year,exp((gam+gamRsdl)-scl),col=name))+
@@ -156,7 +156,7 @@ ggplot(subset(rsdl,name %in% c("Japan LL II","Japan LL III","South Africa BB II"
 
 
 ###################################################
-### code chunk number 18: diags.Rnw:374-383
+### code chunk number 18: diags.Rnw:361-370
 ###################################################
 dat=ddply(rsdl, .(name), with, data.frame(obs=stdz(obs),hat=stdz(hat)))
 
@@ -170,7 +170,7 @@ ggplot(dat) +
 
 
 ###################################################
-### code chunk number 19: diags.Rnw:392-400
+### code chunk number 19: diags.Rnw:379-387
 ###################################################
 dat=ddply(rsdl, .(name), transform, residual=stdz(residual,na.rm=T))
 
@@ -183,7 +183,7 @@ ggplot(aes(year,residual),data=dat) +
 
 
 ###################################################
-### code chunk number 20: diags.Rnw:409-417
+### code chunk number 20: diags.Rnw:396-404
 ###################################################
 ggplot(rsdl)                                              +
   geom_point( aes(residual,residualLag))                  +
@@ -196,7 +196,7 @@ ggplot(rsdl)                                              +
 
 
 ###################################################
-### code chunk number 21: diags.Rnw:426-432
+### code chunk number 21: diags.Rnw:413-419
 ###################################################
 ggplot(rsdl)                                           +
   geom_point( aes(qqx,qqy))                            +
@@ -207,7 +207,7 @@ ggplot(rsdl)                                           +
 
 
 ###################################################
-### code chunk number 22: diags.Rnw:440-446
+### code chunk number 22: diags.Rnw:427-433
 ###################################################
 ggplot(aes(hat, residual),data=rsdl)   +
   geom_hline(aes(yintercept=0))         +
@@ -218,7 +218,7 @@ ggplot(aes(hat, residual),data=rsdl)   +
 
 
 ###################################################
-### code chunk number 23: diags.Rnw:471-474
+### code chunk number 23: diags.Rnw:458-461
 ###################################################
 data(ce)
 uStd=glm(log(u)~factor(yr)+factor(flt)+factor(mo),na.action=na.omit,data=transform(ce,u=catch/effort))
