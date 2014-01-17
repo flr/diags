@@ -7,14 +7,13 @@
 %\VignetteKeyword{CPUE, diagnostics, IO, read, write}
 
 \documentclass[shortnames,nojss,article]{jss}
-
 \usepackage[utf8]{inputenc}
 %\usepackage{hyperref}
 %\usepackage{geometry}
 \usepackage{framed}
 \usepackage{color}
 \usepackage[onehalfspacing]{setspace}
-\usepackage{natbib} \bibliographystyle{plain}
+%\usepackage{natbib} \bibliographystyle{plain}
 \usepackage{graphicx, psfrag, Sweave}
 %\usepackage{enumerate}
 %\geometry{verbose,a4paper,tmargin=2cm,bmargin=1.5cm,lmargin=2cm,rmargin=3cm}
@@ -65,25 +64,10 @@ stampIt=function(...){
    
    ldply(args, function(x) { res=packageDescription(x)
                             c(Package=x,
-                              Version=packageDescription("ALKr")$Version,
-                              Date   =packageDescription("ALKr")$Date)})}
+                              Version=packageDescription(x)$Version,
+                              Date   =packageDescription(x)$Date)})}
 
-smry=stampIt("ALKr")
-
-theme_ms <- function(base_size = 12, base_family = "",...) { 
-  # Starts with theme_grey and then modify some parts 
-  res=theme_grey(base_size = base_size, base_family   = base_family) %+replace% 
-    theme(axis.text         = element_text(                                     size   = rel(0.8)), 
-          axis.ticks        = element_line(                 colour = "black"), 
-          legend.key        = element_rect(                 colour = "grey80"), 
-          panel.background  = element_rect(fill = "white",  colour = NA), 
-          panel.border      = element_rect(fill = NA,       colour = "grey50"), 
-          panel.grid.major  = element_line(                 colour = "grey90",  size = 0.2), 
-          panel.grid.minor  = element_line(                 colour = "grey98",  size = 0.5), 
-          strip.background  = element_rect(fill = "grey80", colour = "grey50"), 
-          strip.background  = element_rect(fill = "grey80", colour = "grey50")) 
-  
-  modifyList(res, list(...))} 
+smry=stampIt("diags")
 @
 
 
@@ -493,9 +477,9 @@ diags(uStd)
 \end{center}\end{figure}
 
 
-\newpage
-\bibliography{refs} 
-\bibliographystyle{abbrvnat}
+%\newpage
+%\bibliography{refs} 
+%\bibliographystyle{abbrvnat}
 
 \end{document}
 
