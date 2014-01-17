@@ -409,7 +409,7 @@ datfromstr <-
 
 #' mfclVcov
 #' @description 
-#' read Variance Covariance matrix from MFCL output files
+#' reads Variance Covariance matrix from MFCL output files
 #'       
 #' 
 #' @param fileVar; the name of the file or dir which the data are to be read from. 

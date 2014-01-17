@@ -1,5 +1,5 @@
 \name{data}
-\alias{rsdl}
+\alias{rsdl}\alias{ce}
 \title{Example Datasets}
 \description{
 \itemize{
