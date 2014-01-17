@@ -23,6 +23,7 @@ Depends:
     ggplot2,
     reshape,
     plyr,
+    LaF,
     ellipse,
     corrplot
 Suggests:

@@ -1,6 +1,4 @@
 read.cas=function(x,nrows=NULL){
-  require(LaF)
-  require(reshape)
   
   nms=names(read.csv(x,nrows=1))
   fld=nms[1:18]
@@ -21,8 +19,6 @@ read.cas=function(x,nrows=NULL){
   res}
 
 read.caa=function(x,nrows=NULL){
-  require(LaF)
-  require(reshape)
   
   nms=names(read.csv(x,nrows=1))
   fld=nms[1:22]
