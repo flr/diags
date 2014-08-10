@@ -6,9 +6,9 @@
 mfclVcov(fileVar, fileCor)
 }
 \arguments{
-  \item{fileVar;}{the name of the file.}
+  \item{fileVar}{the name of the file.}
 
-  \item{fileCor;}{the name of the file or dir which the
+  \item{fileCor}{the name of the file or dir which the
   data are to be read from.}
 }
 \value{

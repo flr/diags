@@ -1,4 +1,4 @@
-\docType{functions}
+\docType{methods}
 \name{fget}
 \alias{fget}
 \title{fget}

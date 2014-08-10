@@ -16,21 +16,23 @@ setMethod('aav', signature(object='FLQuant'),
  
   return(res1/res2)})
 
+
+av=function(x) {
+  n  =length(x)
+  
+  if (!is.numeric(x[-1]) || !is.numeric(x[-n])) return(NULL)
+  res1=sum(abs(x[-1]-x[-n]))
+  res2=sum(x[-n])
+  
+  return(res1/res2)}
+
+
 setMethod('aav', signature(object='data.frame'),
  function(object){
           
   yrs   =object$year
   object=object[order(yrs),]
   
-  av=function(x) {
-    n  =length(x)
-
-    if (!is.numeric(x[-1]) || !is.numeric(x[-n])) return(NULL)
-    res1=sum(abs(x[-1]-x[-n]))
-    res2=sum(x[-n])
- 
-    return(res1/res2)}
- 
   res  =apply(object, 2, av)
   res  =res[!(names(res) %in% "year")]
 

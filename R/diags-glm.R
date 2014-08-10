@@ -1,3 +1,6 @@
+utils::globalVariables(c("y","resStd","hatLn","res","FLPar","YearC"))
+
+
 #### Diagnostics for a glm
 .diagGlm<-function(object){
    vplayout <-function(x, y) viewport(layout.pos.row=x, layout.pos.col=y)
