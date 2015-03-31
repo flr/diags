@@ -170,6 +170,7 @@ readIndices2box<-function(file,na.strings="NA") {
   return(res)}
 
 partialF<-function(idx,object,years){
+  if ("integer"%in%class(years)) years=as.character(years)
   paa=FLQuants(llply(idx,catch.n))
   caa=catch.n(object)
   faa=harvest(object)
@@ -183,6 +184,7 @@ partialF<-function(idx,object,years){
     else{
       res=apply(pf[,years],1,function(x) sum(x))
       res=res/max(res)
+      res
     }}))
   
   res}
@@ -190,7 +192,7 @@ partialF<-function(idx,object,years){
 
 cpueHat<-function(object,pf,vpa){
   hat=apply(stock.wt(vpa)[dimnames(object@catch.n)$age, dimnames(object@index)$year]*
-              stock.n( vpa)[dimnames(object@catch.n)$age, dimnames(object@index)$year]%*%
+            stock.n( vpa)[dimnames(object@catch.n)$age, dimnames(object@index)$year]%*%
               pf,c(2,6),sum)
   sweep(hat,6,apply(hat,6,mean),"/")}
 
