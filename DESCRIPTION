@@ -56,4 +56,5 @@ Collate:
     'diags-aav.R'
     'diags-fget.R'
     'diags-mcmc.R'
+    'diags-FLSR.R'
     'ioICCAT.R'

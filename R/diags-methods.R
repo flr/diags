@@ -7,7 +7,7 @@
 #' diags,character,character-method
 
 #' @param object; name of file or dir where the data are read from. 
-#' @param method; stock assessment method type one of \code{c("aspic","adapt","bsp","mfcl","ss","sam","vpa")}
+#' @param method; stock assessment method type one of \code{c("2box","aspic","adapt","bsp","mfcl","ss","sam","vpa")}
 #' @return a \code{data.frame} with observed and fitted values by CPUE series.
 #' @export
 #' @docType methods

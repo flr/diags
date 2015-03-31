@@ -14,7 +14,7 @@ setMethod('aav', signature(object='FLQuant'),
   res1=apply(abs(o1-o2),c(1,3:6),sum, na.rm=TRUE)
   res2=apply(o2,        c(1,3:6),sum, na.rm=TRUE)
  
-  return(res1/res2)})
+  return(FLQuant(res1/res2))})
 
 
 av=function(x) {
