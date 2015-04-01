@@ -221,7 +221,7 @@ uHat<-function(object,stk){
   yrs=ac(range(object)["minyear"]:range(object)["maxyear"])
   
   if (tolower(substr(type(object)[2],1,1))=="b"){
-    pf =partialFn(object,stk)
+    pf =diags:::partialFn(object,stk)
     
     if (tolower(substr(type(object)[1],1,1))=="w")
       hat=apply(stock.n( stk)[age, yrs]*
