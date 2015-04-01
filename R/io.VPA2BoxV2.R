@@ -190,11 +190,47 @@ partialF<-function(idx,object,years){
   res}
 
 
+partialFn<-function(object,stk){
+  age=ac(range(object)["min"]:range(object)["max"])
+  yrs=ac(range(object)["minyear"]:range(object)["maxyear"])
+  
+  paa=catch.n(object)
+  caa=catch.n(stk)[age,yrs]
+  faa=harvest(stk)[age,yrs]
+  
+  pf  =faa%*%paa%/%caa
+  
+  if (dim(paa)[1]==1)
+    FLQuant(1,dimnames=list(year=1,age=dmns$age))
+  else{
+    res=apply(pf[,yrs],1,function(x) sum(x))
+    res=res/max(res)}
+  
+  res}
+
 cpueHat<-function(object,pf,vpa){
   hat=apply(stock.wt(vpa)[dimnames(object@catch.n)$age, dimnames(object@index)$year]*
             stock.n( vpa)[dimnames(object@catch.n)$age, dimnames(object@index)$year]%*%
               pf,c(2,6),sum)
+  
   sweep(hat,6,apply(hat,6,mean),"/")}
+
+uHat<-function(object,stk){
+  
+  age=ac(range(object)["min"    ]:range(object)["max"])
+  yrs=ac(range(object)["minyear"]:range(object)["maxyear"])
+  
+  if (tolower(substr(type(object)[2],1,1))=="b"){
+    pf =partialFn(object,stk)
+    
+    if (tolower(substr(type(object)[1],1,1))=="w")
+      hat=apply(stock.n( stk)[age, yrs]*
+                stock.wt(stk)[age, yrw]%*%pf,c(2,6),sum)
+    else
+      hat=apply(stock.n(stk)[age, yrs]%*%pf,c(2,6),sum)
+    }
+    
+   hat}
 
 hindcast<-function(file,dirPrj,maxyear="missing",plusgroup=40){
   
@@ -256,3 +292,5 @@ hindcast<-function(file,dirPrj,maxyear="missing",plusgroup=40){
   discards.wt(vpa)[, prjYrs]=discards.wt(vpa)[, max(vpaYrs)]
   
   return(vpa)} 
+
+
