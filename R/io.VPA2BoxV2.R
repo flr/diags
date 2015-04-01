@@ -204,7 +204,8 @@ partialFn<-function(object,stk){
     FLQuant(1,dimnames=list(year=1,age=dmns$age))
   else{
     res=apply(pf[,yrs],1,function(x) sum(x))
-    res=res/max(res)}
+    res=res/max(res)
+    res=FLQuant(res,dimnames=list(age=age,iter=dimnames(object@index)$iter))}
   
   res}
 
