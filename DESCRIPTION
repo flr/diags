@@ -1,7 +1,7 @@
 Package: diags
 Type: Package
 Title: Diagnostics for stock assessment methods.
-Version: 0.0
+Version: 1.0.0
 Date: 2012-11-01
 Author: Laurence Kell
 Maintainer: Laurence Kell <LaurieKell@iccat.int>
@@ -50,7 +50,6 @@ Collate:
     'writeU-methods.R'
     'writeU-SS.R'
     'writeU-VPASuite.R'
-    'themes.R'
     'multiplot.R'
     'diags-glm.R'
     'diags-aav.R'

@@ -4,28 +4,13 @@ setGeneric('aav', function(object, ...)
 setGeneric('antiCurve', function(object, ...)
   standardGeneric('antiCurve'))
 
-setMethod('aav', signature(object='FLQuant'),
+setMethod('aav', signature(object='numeric'),
  function(object){
-  yrs=dimnames(object)$year
   
-  o1 =object[,yrs[-1]]
-  o2 =object[,rev(rev(yrs)[-1])]
+  o1 =object[-1]
+  o2 =object[-length(object)]
   
-  res1=apply(abs(o1-o2),c(1,3:6),sum, na.rm=TRUE)
-  res2=apply(o2,        c(1,3:6),sum, na.rm=TRUE)
- 
-  return(FLQuant(res1/res2))})
-
-
-av=function(x) {
-  n  =length(x)
-  
-  if (!is.numeric(x[-1]) || !is.numeric(x[-n])) return(NULL)
-  res1=sum(abs(x[-1]-x[-n]))
-  res2=sum(x[-n])
-  
-  return(res1/res2)}
-
+  return(abs(o1-o2)/o1)})
 
 setMethod('aav', signature(object='data.frame'),
  function(object){
@@ -36,17 +21,6 @@ setMethod('aav', signature(object='data.frame'),
   res  =apply(object, 2, av)
   res  =res[!(names(res) %in% "year")]
 
-  return(res)})
-  
-setMethod('antiCurve', signature(object='FLQuant'),
- function(object,tol=.010){
-  yrs=dimnames(object)$year
-  
-  M  =(object[,yrs[-(1:2)]]+object[,rev(rev(yrs)[-(1:2)])])/2
-  o1 =object[,yrs[c(-1,-length(yrs))]]
-
-  res=apply(abs((o1-M)/qmax(M,tol)),c(1,3:6),mean, na.rm=TRUE)
- 
   return(res)})
   
 setMethod('antiCurve', signature(object='data.frame'),
