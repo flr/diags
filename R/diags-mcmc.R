@@ -1,3 +1,5 @@
+utils::globalVariables(c("mcmc"))
+
 as.mcmc.rjags <- function (x) {
   x <- x$BUGSoutput
   if (x$n.chains > 1) {

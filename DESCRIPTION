@@ -1,41 +1,28 @@
 Package: diags
 Type: Package
-Title: Diagnostics for stock assessment methods.
-Version: 1.0.0
+Title: Diagnostics for stock assessment methods
+Version: 2.0.0
 Date: 2012-11-01
 Author: Laurence Kell
 Maintainer: Laurence Kell <LaurieKell@iccat.int>
-Description: This package provides methods to work with CPUE data from a
-    variety of fish stock assessment programs. Stock assessment is conducted
-    using a variety of standalone executable programs, each with their own
-    input and output file formats. This package provides a set of common
-    methods for reading these data into R, plotting and summarising them. It
-    also provides methods for data exchange between programs, i.e. as well as
-    reading in data from a variety of file formats it also provides methods for
-    writing data in the same file formats.
+Description: Stock assessment is conducted main using a variety of standalone
+    executable programs, each with their own input and output file formats. This
+    package provides a set of common methods for reading these data into R, plotting
+    and summarising them. It also provides methods for data exchange between
+    programs, i.e. as well as reading in data from a variety of file formats it also
+    provides methods for writing data in the same file formats.This package provides
+    methods to work with CPUE data from a variety of fish stock assessment programs.
 License: GPL-2
-Imports:
-    grid,
-    stringr,
-    r4ss,
-    reshape,
-    plyr,
-    ggplot2,
-    LaF,
-    ellipse,
-    corrplot
 Depends:
     R(>= 2.15.1),
-    methods
 Suggests:
+    methods,
     RCurl,
-    gam
+    gam,
+    GGally
 Collate:
     'diags-2box.R'
     'diags-aspic.R'
-    'diags-funcs.R'
-    'diags-methods.R'
-    'diags-MFCL.R'
     'diags-SAM.R'
     'diags-SS.R'
     'diags-BSP.R'
@@ -48,13 +35,12 @@ Collate:
     'readU-VPASuite.R'
     'writeU-BSP.R'
     'writeU-methods.R'
-    'writeU-SS.R'
     'writeU-VPASuite.R'
     'multiplot.R'
-    'diags-glm.R'
     'diags-aav.R'
     'diags-fget.R'
     'diags-mcmc.R'
-    'diags-FLSR.R'
     'ioICCAT.R'
-    'io.VPA2BoxV2.R'
+    'ggally-funcs.R'
+    'data.R' 
+RoxygenNote: 5.0.1

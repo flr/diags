@@ -1,3 +1,5 @@
+utils::globalVariables(c("variable","id.","read.frq","catch","effort","qtr","week","fishery"))
+
 iUMFCL=function(plotFrqFile){
             
         mm=as.data.frame(read.frq(plotFrqFile)$mat[-1,1:6])

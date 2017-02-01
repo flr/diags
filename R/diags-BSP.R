@@ -1,4 +1,8 @@
 utils::globalVariables(c("name","age"))
+utils::globalVariables(c("read.csv"))
+utils::globalVariables(c("ddply"))
+utils::globalVariables(c("."))
+utils::globalVariables(c("diagsFn"))
 
 .diagUbsp=function(x){
 

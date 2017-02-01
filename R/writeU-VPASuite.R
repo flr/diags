@@ -1,4 +1,9 @@
 utils::globalVariables(c("name"))
+utils::globalVariables(c("dlply"))
+utils::globalVariables(c("."))
+utils::globalVariables(c("cast"))
+utils::globalVariables(c("llply"))
+utils::globalVariables(c("m_ply"))
 
 .writeUvpa=function(object,file,smry=attributes(object)$smry) {  
   

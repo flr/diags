@@ -1,3 +1,5 @@
+utils::globalVariables(c("av"))
+
 setGeneric('aav', function(object, ...)
   standardGeneric('aav'))
 

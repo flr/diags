@@ -1,3 +1,9 @@
+utils::globalVariables(c("mdply"))
+utils::globalVariables(c("adply"))
+utils::globalVariables(c("dlply"))
+utils::globalVariables(c("."))
+utils::globalVariables(c("ddply"))
+
 cpueCode=c("CE", "Fishing effort rate, catch (weight)",                  "Effort rate: annual average,Catch: annual total",
            "CC", "CPUE (weight-based), catch (weight)",                  "CPUE: annual average,Catch: annual total",
            "B0", "Estimate of biomass Effort rate: annual average",      "Start of year",

@@ -7,10 +7,12 @@
 #' readCpue,character,character-method
 #' readCpue,character,missing-method
 #' 
-#' @param file; the name of the file or dir which the data are to be read from. 
-#' @param method; stock assessment method type one of \code{c("aspic","adapt","bsp","mfcl","ss","sam","vpa")}
+#' @param file the name of the file or dir which the data are to be read from. 
+#' @param method stock assessment method type one of \code{c("aspic","adapt","bsp","mfcl","ss","sam","vpa")}
+#' @param ... any other parameters
+#' 
 #' @return a \code{data.frame} with the CPUE series.
-#' @export
+#' 
 #' @docType methods
 #' @rdname readCpue
 #' 

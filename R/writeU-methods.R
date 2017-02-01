@@ -10,11 +10,11 @@ utils::globalVariables(c(".writeUbsp",".writeUSS",".writeUVPASuite"))
 #' writeCpue-method
 #' writeCpue,data.frame,character,character-method
 #' 
-#' @param object; the name of the file or dir which the data are to be read from. 
-#' @param file; name of text file to save data to.
-#' @param method; stock assessment method type one of \code{c("bsp","ss","vpa")}
+#' @param object the name of the file or dir which the data are to be read from. 
+#' @param file name of text file to save data to.
+#' @param method stock assessment method type one of \code{c("bsp","ss","vpa")}
+#' @param ... any other parameters
 #' 
-#' @export
 #' @docType methods
 #' @rdname writeCpue
 #' 

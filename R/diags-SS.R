@@ -1,7 +1,9 @@
 #x="/home/laurie/Desktop/Dropbox/ICCAT/SCRS/BIL/2012/section_6/Inputs/SS3/mcmc_diagnostics/Run_1"
 
 utils::globalVariables(c("SS_output","FleetName","Yr","Obs","Exp","Dev","index","residual",".diagUbsp"))
-
+utils::globalVariables(c("ddply"))
+utils::globalVariables(c("."))
+utils::globalVariables(c("diagsFn"))
 
 .diagUss=function(x){
   res=subset(SS_output(x, forecast  =FALSE, 

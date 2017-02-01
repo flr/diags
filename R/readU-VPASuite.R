@@ -1,3 +1,5 @@
+utils::globalVariables(c("mfclVcov"))
+utils::globalVariables(c("str_trim"))
 
 iUVPASuite = function(file., sep="", quiet=TRUE, cchar='#', na.strings="NA") {
       

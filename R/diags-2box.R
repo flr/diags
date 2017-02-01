@@ -1,7 +1,42 @@
+utils::globalVariables(c("qqnorm"))
+utils::globalVariables(c("quantile"))
+utils::globalVariables(c("str_trim"))
 
-.diagU2box<-function(x){
+utils::globalVariables(c("read.table"))
+utils::globalVariables(c("melt"))
+utils::globalVariables(c("ddply"))
+utils::globalVariables(c("."))
 
-    tab5<-scan(x,what="",sep="\n")
+utils::globalVariables(c("start"))
+utils::globalVariables(c("end"))
+utils::globalVariables(c("melt"))
+utils::globalVariables(c("broomify"))
+utils::globalVariables(c("y"))
+
+
+#' @title diags.vpa2box
+#' 
+#' @description 
+#' Reads in the fits to the indices of abundance from VPA2Box
+#' 
+#' @param file the results file
+#' @param ... any other arguments
+#' 
+#' @return an \code{data.frame} object
+#' @aliases diags.vpa2box-method diags.vpa2box,character-method
+#' 
+#' @export
+#' @rdname diags.vpa2box
+#' 
+#' @examples
+#' \dontrun{
+#' diags.vpa2box(file)
+#' } 
+#' 
+setGeneric('diags.vpa2box',   function(file,...) standardGeneric('diags.vpa2box'))
+setMethod('diags.vpa2box',    signature(file='character'), function(file,...){
+
+    tab5<-scan(file,what="",sep="\n")
     tab5<-tab5[grep("TABLE 5.",tab5):length(tab5)]
 
     pos  <-grep("Chi-sq. discrepancy=",tab5)
@@ -22,9 +57,17 @@
     uDiag<-data.frame(name=unlist(mapply(rep, nms,(end-str)+1)),uDiag,row.names=NULL)
 
     #uDiag$name<-factor(uDiag$name)
-    if (nVar==9) names(uDiag)<-c("name","year","obs","hat","residual","sd","q","obs2","hat2","chi2")
-    if (nVar==7) names(uDiag)<-c("name","year","obs","hat","residual","sd","q","chi2")
-
+    if (nVar==9) {
+      names(uDiag)<-c("name","year","x","y","residual","sd","q","x2","y2","chi2")
+      uDiag=transform(uDiag,yhat=y+residual)
+      uDiag<-uDiag[,c("name","year","x","y","yhat","residual","sd","q","x2","y2","chi2")]
+      }
+    if (nVar==7) {
+      names(uDiag)<-c("name","year","x","y","residual","sd","q","chi2")
+      uDiag=transform(uDiag,yhat=y+residual)
+      uDiag<-uDiag[,c("name","year","x","y","yhat","residual","sd","q","chi2")]
+      }
+    
     uDiag$residualLag<-c(uDiag$residual[-1],NA)
     uDiag[!duplicated(uDiag[,"name"]),"residualLag"]<-NA
 
@@ -60,9 +103,8 @@
     uDiag$qqHat<-uDiag$qqx*par["a"]+par["b"]
     
     uDiag$name=str_trim(uDiag$name)
-    names(uDiag)[3]="obs"
     
-    return(uDiag)}
+    return(uDiag)})
   
 getPos<-function(file){
     lns   <-scan(file,what="",sep="\n")
@@ -129,3 +171,56 @@ getIdx<-function(x){
   names(waa)[4]<-"data"
 
   return(list(range=rng,specs=specs,index=idx,vul=vul,waa=waa))} 
+
+if (FALSE){
+  #http://ggobi.github.io/ggally/#ggally
+    
+  library(diags)
+  library(plyr)
+  library(dplyr)
+  library(GGally)
+  library(stringr)
+  dirVPA="/home/laurie/Desktop/kobe/inputs/bfte/2014/vpa/reported/med"
+  rsdl=diags:::diags.vpa2box(file.path(dirVPA,"MINUS0.R"))
+  
+  rsdl=cbind(rsdl[,-(3:4)],(ddply(rsdl,.(name),with, broomify(lm(y~x-1)))))
+  rsdl=transform(rsdl,yhat=y+residual)
+  
+  lm_with_cor <- function(data, mapping, ..., method = "pearson") {
+    x <- data[[deparse(mapping$x)]]
+    y <- data[[deparse(mapping$y)]]
+    cor <- cor(x, y, method = method)
+    ggally_smooth_lm(data, mapping, ...) +
+      ggplot2::geom_label(
+        data = data.frame(
+          x = min(x, na.rm = TRUE),
+          y = max(y, na.rm = TRUE),
+          lab = round(cor, digits = 3)
+        ),
+        mapping = ggplot2::aes(x = x, y = y, label = lab, color = NULL),
+        hjust = 0, vjust = 1,
+        size = 5, fontface = "bold"
+      )
+  }
+  
+  ggduo(rsdl,c("year","y"),c("residual",".fitted"),
+        mapping=aes(color=name),
+  types = list(continuous = wrap(lm_with_cor, alpha = 0.25)),
+  showStrips = FALSE,
+  title = "Between Academic and Psychological Variable Correlation",
+  xlab = "",
+  ylab = "",
+  #legend = c(5,2)
+  ) +
+  theme(legend.position = "bottom")
+  
+  cast(rsdl,name~+.sigma,.resid)
+
+  rsdl=transform(rsdl,yhat=y-residual)
+  c(".resid",".sigma",".hat",".cockssd")
+  
+  ggplot(melt(rsdl[,c("name","year","residual",".hat",".cooksd",".sigma")],id=c("name","year")))+
+    geom_point(aes(year,value))+
+    facet_grid(variable~name,scale="free",space="free")
+
+}

@@ -7,7 +7,7 @@
 #' @param package directs you to where you have installed the package 
 #' @return \code{char} with path and file 
 #' @export
-#' @docType functions
+#' @docType methods
 #' @rdname fget
 #' 
 #' @examples

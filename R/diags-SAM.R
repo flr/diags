@@ -1,4 +1,13 @@
 utils::globalVariables(c("name","age"))
+utils::globalVariables(c("ddply"))
+utils::globalVariables(c("."))
+utils::globalVariables(c("rstudent"))
+utils::globalVariables(c("lm"))
+utils::globalVariables(c("rstandard"))
+
+utils::globalVariables(c("read.table"))
+utils::globalVariables(c("diagsFn"))
+
 
 readSam<-function(file, reduced=FALSE){
   # Function to read a basic fit

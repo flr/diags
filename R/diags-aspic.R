@@ -7,6 +7,7 @@
  utils::globalVariables(c("value"))
  utils::globalVariables(c("index"))
  utils::globalVariables(c("residual"))
+ utils::globalVariables(c("diagsFn"))
 
 
 .diagUaspic=function(object){

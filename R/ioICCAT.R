@@ -1,3 +1,11 @@
+utils::globalVariables(c("read.csv"))
+utils::globalVariables(c("laf_open_csv"))
+utils::globalVariables(c("melt"))
+utils::globalVariables(c("read.csv"))
+utils::globalVariables(c("laf_open_csv"))
+utils::globalVariables(c("melt"))
+utils::globalVariables(c("YearC"))
+
 read.cas=function(x,nrows=NULL){
   
   nms=names(read.csv(x,nrows=1))
