@@ -43,4 +43,5 @@ Collate:
     'ioICCAT.R'
     'ggally-funcs.R'
     'data.R' 
+    'diags-funcs.R'
 RoxygenNote: 5.0.1
