@@ -44,4 +44,5 @@ Collate:
     'ggally-funcs.R'
     'data.R' 
     'diags-funcs.R'
+    'io.VPA2BoxV2.R'
 RoxygenNote: 5.0.1

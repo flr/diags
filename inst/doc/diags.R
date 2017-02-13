@@ -70,13 +70,11 @@ head(rsdl)
 ## u2box=readCpue("unisex09.c01","2box")
 ## uSS  =readCpue("myDir","ss")
 
-
 ###################################################
 ### code chunk number 10: data (eval = FALSE)
 ###################################################
 ## stdz(  rnorm(10,1,.3))
 ## minMax(rnorm(10,1,.3))
-
 
 ###################################################
 ### code chunk number 11: data (eval = FALSE)

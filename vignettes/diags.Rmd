@@ -1,0 +1,544 @@
+---
+title: "Stock Assessment Diagnostics"
+author: "Laurence Kell"
+date: "`r format(Sys.time(), '%d %B, %Y')`"
+output: rmarkdown:::html_document
+vignette: >
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteIndexEntry{Vignette Title}
+  %\VignetteEncoding{UTF-8}
+bibliography: /home/laurie/bib/refs.bib
+tags: FLPKG FLR
+license: Creative Commons Attribution-ShareAlike 4.0 International
+---
+
+```{r knitr_init, echo=FALSE, results="hide"}
+library(knitr)
+## Global options
+opts_chunk$set(echo    =!TRUE,
+               eval    =TRUE,
+               cache   =!FALSE,
+               cache.path="cache/",
+               prompt  =FALSE,
+               comment =NA,
+               message =FALSE,
+               tidy    =FALSE,
+               warning =FALSE,
+               fig.height=4.5,
+               fig.width =8,
+               fig.path  ="tex/")
+```
+
+
+```{r, pkgs, echo=FALSE, message=FALSE}
+sink(NULL)
+options(warn=-1)
+
+library(ggplot2)
+library(diags)
+
+theme_set(theme_bw())
+options(digits=3)
+```
+
+[](#top)
+
+[Introduction](#Introduction)
+
+Many stock assessment methods use linear regression e.g. for calibration when using CPUE as trends of relative abundance or as part of emprirical harvest control rules. Regression models, however, are vulnerable to abnormal points, which may cause bias, affect estimation accuracy and result in poor prediction skill. This is especially true when the number of observations are small as means there are fewer cases to counter them. Even if there are there many cases miscodes and excluding important explanatory variables can influence the regression model. It is important therefore to identify influential points and explore there impacts
+
+In linear regression, abnormal points can be defined as when there is a large  descrepency between the observed Y and predicted Y value given their X value (outlier) and when they have an unusual X-value (leverage). The influence of a point is a function of the discrepency and leverage, e.g.
+
+      Influence = Discrepency X Leverage
+
+Outliers can be identified using studentized residuals and quantile-comparison plots, leverage can be assessed by exploring the hat-values, and influence by calculating DFBeta or Cook’s Distance. While the bias in parameter estimates can be evaluated using simulation, e.g. the bootstrap or jackknife.
+
+## Outliers
+
+In linear regression the standard deviations of residuals in a sample vary greatly from one data point to another even when if the errors all have the same standard deviation. It does not make sense therefore to compare residuals from different data points without first studentising, where a studentised residual is computed by dividing a residual by an estimate of its standard deviation. 
+
+## Leverage
+
+The leverage of a point is related to how much the X value (i.e. the predictor variable) of an observation differs from the mean of that predictor variable. The greater the difference between the X value and the mean the more potential it has to be influential. For example, an observation with a X value equal to the mean has no influence on the slope of the regression line regardless of its Y value, only on the intercept. While a point with an extreme X value has the potential to affect the slope and the intercept.
+
+To calculate the leverage first the predictor variable has to be standardised so that it has a mean of 0 and a standard deviation of 1. Then, the leverage (h) is computed by squaring the observation's value on the standardised predictor variable, adding 1, and dividing by the number of observations.
+
+## Influence
+
+The influence of an observation's is a function of the its leverage and the discrepency. An observation is influential if when omitted the predictions for the other observations differ, influence can be calculated by Cook's D  or the jackknife. 
+
+### Cook's D
+
+Cook's D is a measure of the influence is proportional to the sum of the squared differences between predictions made with all observations in the analysis and predictions made leaving out the observation in question. If the predictions are the same regardless of whether the observation is included then it has no influence on the regression model. Alternatively if the predictions differ greatly when the observation is not included in the analysis, then the observation is influential.
+
+A common rule of thumb is that an observation with a value of Cook's D over 1.0 has too much influence. Although with all rules of thumb, it all depends. 
+
+
+
+An observation is influentila if when it is omitted the predictions for the other observations differ. 
+## Influence
+
+An observation's influence is a function of the leverage and the d
+Calculation of Cook's D (Optional)
+
+The first step in calculating the value of Cook's D for an observation is to predict all the scores in the data once using a regression equation based on all the observations and once using all the observations except the observation in question. The second step is to compute the sum of the squared differences between these two sets of predictions. The final step is to divide this result by 2 times the MSE (see the section on partitioning the variance).
+
+•
+Influence Plots
+(or bubble plots) are useful because 
+they display the studentized residuals, hat-values and 
+Cook’s distances all on the same plot
+•  Joint influence is best assessed using 
+Added-Variable 
+Plots
+(or partial-regression plots)
+
+## Bias
+
+Data sets with influential points can be linear or nonlinear. In this lesson, we went over an example in which an influential point increased the coefficient of determination. With respect to regression, outliers are influential only if they have a big effect on the regression equation. Sometimes, outliers do not have big effects. For example, when the data set is very large, a single outlier may not have a big effect on the regression equation.
+
+A few questionable data points, i.e. outliers, can skew distributions, make significant results appear insignificant and have an large influence on results. Before identifying outliers it is necessary to characterise what are normal observations. This can be done by examining the overall shape of the data looking for important features and departures from assumptions then identifying any unusual observations that are far removed from the rest of the data. There are various graphical techniques for summarising data distributions, e.g. quantile-quantile, scatter and box plots. Throwing away inconvenient data when they do not support a hypothesis, however, is never a good idea and there is a simple procedure to identify small subsets of data that influence statistical measures. It is called the jackknife.
+
+The jackknife is a resampling technique that is a special case of the bootstrap. It is a relatively simple and straightforward procedure, and has been widely adopted as an estimator of bias for any statistic and as a way to examine the stability of a variance estimate. The jackknife is therefore a useful tool in quality control by identifying outliers and bias in statistical estimates. 
+
+In these examples the jackknife procedure is used to identifying CPUE observations with large influence on assessment results. 
+
+The Jackknife can be used to illustrate uncertainty by removing one observations at a time sequentially for all observations. This allows the influence of individual points to be evaluated. For example if model estimates are driven by a single influential point results may be unstable. 
+
+
+[Installation](#Installation)
+
+[Quick Start](#QuickStart)
+
+[Analysis](#Analysis)
+
+[More information](#More information)
+
+[References](#References)
+
+# Introduction {#Introduction}
+
+
+[Back to Top](#top)
+
+# Installation {#Installation}
+
+The simplest way to obtain diags is to install it from CRAN by using the following command in the R console:
+
+```{r install,echo=TRUE,eval=FALSE}
+install.packages("diags", repos = "http://cloud.r-project.org/")
+```
+
+The repos options can be changed depending on personal preferences and includes options such as choosing the directories in which to install the packages see help(install.packages) for more details.
+
+[Back to Top](#top)
+
+# Quick Start {#QuickStart}
+
+So that users may have a better idea of what methods are available, which to choose, and where to seek help this section provides a general overview of the package. It also provides some examples of usage, more details are given in later sections.
+
+First, load the package:
+
+```{r lib,echo=TRUE}
+library(diags)
+```
+
+There is an example dataset for East Atlantic Bluefin, both for illustration and as a test dataset. Alternatively users can load their own data.
+
+```{r data-yft,echo=TRUE,eval=!FALSE}
+load("/home/laurie/Desktop/flr/diags/data/dgs.RData")
+#data(dgs)
+```
+
+The dataset contains fits and residuals for the catch per unit effort (CPUE) used to calibarte a virtual population analysis. 
+
+As always when accessing a dataset it is a good thing to run a quick sanity check.
+
+```{r data-yft2,echo=!TRUE}
+is(dgs)
+colnames(dgs)
+```
+
+### Plotting
+
+Plotting is done using `ggplot2` which provides a powerful alternative paradigm for creating both simple and complex plots in R using the ideas the *Grammar of Graphics* ^[Wilkinson, L. 1999. *The Grammar of Graphics*, Springer. [doi 10.1007/978-3-642-21551-3_13](http://dx.doi.org/10.1007/978-3-642-21551-3_13).] The idea of the grammar is to specify the individual building blocks of a plot and then to combine them to create the graphic desired^[<http://tutorials.iq.harvard.edu/R/Rgraphics/Rgraphics.html>].
+
+The `ggplot` functions expects a `data.frame` for its first argument, `data`; then a geometric object `geom` that specifies the actual marks put on to a plot and an aesthetic that is "something you can see" have to be provided. Examples of geometic Objects (geom) include points (geom_point, for scatter plots, dot plots, etc), lines (geom_line, for time series, trend lines, etc) and boxplot (geom_boxplot, for, well, boxplots!). Aesthetic mappings are set with the aes() function and, examples include, position (i.e., on the x and y axes), color ("outside" color), fill ("inside" color), shape (of points), linetype and size. 
+
+The CPUE series can be compared by plotting 
+
+```{r cpue-plot,echo=TRUE,fig.height=4,fig.width=8}
+ggplot(dgs)+
+  geom_path(aes(year,y,group=name,col=name))
+```
+
+<!--
+### Box plots
+Box plot construction	The box plot is a useful graphical display for describing the behavior of the data in the middle as well as at the ends of the distributions. The box plot uses the median and the lower and upper quartiles (defined as the 25th and 75th percentiles). If the lower quartile is Q1 and the upper quartile is Q3, then the difference (Q3 - Q1) is called the interquartile range or IQ.
+
+Box plots with fences	A box plot is constructed by drawing a box between the upper and lower quartiles with a solid line drawn across the box to locate the median. The following quantities (called fences) are needed for identifying extreme values in the tails of the distribution:
+lower inner fence: Q1 - 1.5*IQ
+upper inner fence: Q3 + 1.5*IQ
+lower outer fence: Q1 - 3*IQ
+upper outer fence: Q3 + 3*IQ
+Outlier detection criteria	A point beyond an inner fence on either side is considered a mild outlier. A point beyond an outer fence is considered an extreme outlier.
+-->
+
+### Split-apply-combine 
+
+`diags` contains a variety of functions to summarise assessment results. These are designed to be used with the `plyr` package to summarise and transform the data. 
+
+```{r plyr,echo=TRUE}
+library(plyr)
+```
+
+`plyr` has methods for running split-apply-combine procedures, e.g. first splitting a dataset into subsets, then running a function on each subset and then recombining the results back into a single object.
+
+An example of estimating the autocorrelation for a series
+```{r plyr2,echo=TRUE}
+par(mfrow = c(4, 2))
+par(mar = c(3, 3, 0, 0), oma = c(1, 1, 1, 1))
+
+d_ply(dgs, .(name), with, acf(residual,lag.max=5))
+```
+
+plyr functions have a simple naming convention. The first two letters of the function tells the input and output data types, respectively. The one above takes a data.frame and returns nothing. The next example returns a data.frame
+
+
+The first argument dgs is the input data frame , the next argument are the variables to subset by over which the statistics will be computed, and the third processes the data.frame by each subset. `with` creates an environment constructed from data in which to run `acf`. 
+
+Combining with ggplot2
+```{r plyr3,echo=TRUE,fig.height=8}
+qq=ddply(dgs, .(name), with, 
+          as.data.frame(qqnorm(residual,plot=FALSE)))
+
+ggplot(aes(x,y),data=qq)+
+  geom_point()+
+  geom_smooth(method="lm")+
+  facet_wrap(~name)
+```
+
+
+[Back to Top](#top)
+
+# Analysis {#Analysis}
+
+The \pkg{diags} package provides methods for plotting and summarising Catch per Unit Effort (CPUE) data used when fitting fish stock assessment methods. Programs for stock assessment are generally implemented as  standalone executable programs with their own text files for input and output files. \pkg{diags} provides a set of methods for reading these data and the results from fitting them nto R then using the 
+%\hyperref[http://had.co.nz/ggplot2/]{ggplot2} package for plotting.
+
+
+## diags
+
+The \code{diags} method reads data from the various stock assessment files into a commom data frame.
+
+The columns identify the observations (\code{year,name} and may include other covariates such as age, season, etc.), the original observations (\code{obs}) and the fitted values and the residuals (\code{obs,hat}) if \code{diags} has been used to read in the data, the residuals with a lag
+of 1 (\code{residualLag}) and the quanitiles (\code{qqx,qqy,qqHat}) assumming a normal distribution.
+
+In some assessment packages the data are in a specific file in other cases the data are in a suite of files found in a dir. Therefore the \code{readCpue} takes either a file or a dir as irs first arguemnt depending on the assessment method e.g. reading in from vpa2box and SS
+
+For plotting and analysis the data may need to be transformed, e.g. observations scaled so that
+they can be compared, or pearson residuals computed. This can be done as required using \code{transform}
+and \code{plyr}, e.g. to standardise the residuals or scale them so that they lie between 0 and 1.
+
+```{r}
+diags:::stdz(  rnorm(10,1,.3))
+diags:::minMax(rnorm(10,1,.3))
+```
+
+
+If you wish to scale the residuals within a series then the \pkg{plyr} can be used which implements the split-apply-combine strategy for \pkg{R} e.g.
+
+```{r}
+dgs=ddply(dgs, .(name), transform, sdgs=diags:::stdz(residual))
+```
+
+One common definition, known as the Pearson residual, is as follows, however the definition depends on the law of large numbers, so it works less well where the number of points in each series is relatively small. Therefore in this anaysis we used the raw residuals, but the residuals could be transformed as required.
+ 
+There may be other analyses that are useful to run on the raw data, e.g. running a GAM to calculate a common trend that the individual series can be compared to. I.e. to look for trends that may be different from the others. This can be done by fitting a smoother to year and a series effect, the latter scales the series so that they can be compared, e.g.
+
+```{r}
+load("/home/laurie/Desktop/flr/diags/data/dgs.RData")
+
+library(gam)
+library( plyr)
+library(dplyr)
+
+scale<-function(x,y,group=1){
+  gm  =gam(y~lo(x)+group)
+
+  res=data.frame(hat =predict(gm),
+                 y     =gm$y,
+                 x     =x,
+                 group =group,
+                 scl   =c(0,coefficients(gm)[-(1:2)])[as.numeric(as.factor(group))]
+                 )
+  res$y  =res$y  -res$scl
+  res$hat=res$hat-res$scl
+  res[,-5]}
+
+```
+
+```{r,fig.cap=""}
+ggplot(with(dgs,scale(year,y,name)))+
+  geom_line( aes(x,hat,col=group))+
+  geom_line( aes(x,y,col=group))+
+  geom_point(aes(x,y,col=group))+
+  theme(legend.position="bottom")
+```
+
+```{r,fig.cap=""}
+ggplot(with(dgs,scale(year,residual,name)))+
+  geom_hline(aes(yintercept=0))+
+  geom_line(aes(x,hat,col=group))+
+  geom_point(aes(x,y,col=group),position=position_dodge(width = 1))+
+  geom_linerange(aes(x,ymin=hat,ymax=y,col=group),position=position_dodge(width = 1))+
+  theme(legend.position="bottom")
+```
+
+When producing a graphic you have to map data to the visual properties of geometric shapes (e.g. points, lines areas). This
+may require statistical transformations of the data, a coordinate system that postions the geometric objects on the page
+and facetting where mutiple plots can be generated. Each of these tasks are independent and the grammar breaks theses into four 
+%components \emph{Geoms, Aesthetics, Coordinates and Facetting}. 
+
+First we load up FLR and an example data set based on North Sea plaice. ggplot uses data in the form of a data.frame so we 
+next have to convert the FLR object to a data.frame. 
+
+Facetting creates individual panels by the facetting variables, while themes allow you to prettify the plots. 
+
+
+# Exploratory Data Analysis
+
+First the CPUE time series are plotted using \code{geom_line} to plot the common trend as estimated by the GAM,
+then \code{geom_smooth} fits a loess by series and then \code{geom_point} is used to overlay the original observations. \code{facet_wrap} then plots the series individually. \code{theme_ms} is a bespoke theme to change the look of the plot from the default.
+
+
+\caption{\bf{Plot of indices of abundance, points are the observed index values and the blue a 
+lowes fit to the points by index. The red line is GAM fitted to lo(year) and fleet.}}
+\label{cpue:1} 
+
+
+The correlations between indices can be seen by plotting the indices against each other 
+
+```{r,eval=!FALSE}
+library(reshape)
+library(GGally)
+library(diags)
+library(reshape2)
+library(plyr)
+
+my_density <- function(data,mapping,...){
+  ggplot(data=data,mapping=mapping)+
+    geom_density(...,lwd=1)}
+
+my_smooth <- function(data,mapping,...){
+  ggplot(data=data,mapping=mapping)+
+    geom_point(...,size=.5)+
+    geom_smooth(...,method="lm",se=FALSE)}
+
+mat=cast(dgs,year~name,value="y")
+names(mat)=gsub(" ", "_",names(mat))
+
+ggpairs(mat,
+  upper=list(continuous=wrap("cor",size=4, hjust=0.5)),
+  lower=list(continuous = wrap(my_smooth)),
+  diag=list(continuous=wrap(my_density,alpha=0.2)))
+```
+\caption{\bf{Pairwise scatter plots of the indices of abundance, blue lines are linear regressions 
+fitted to the points, the shade area is the standard error of predicted means and the red line is 
+the mean of the points on the y-axis.}}
+\label{cpue:2}
+
+
+The indices are then be grouped based on a cluster analysis
+
+```{r}
+library(corrplot)
+cr=cor(mat[,-1],use="pairwise.complete.obs")
+dimnames(cr)=list(gsub("_"," ",names(mat)[-1]),gsub("_"," ",names(mat)[-1]))
+cr[is.na(cr)]=0
+corrplot(cr,diag=F,order="hclust",addrect=2)  +          
+             theme(legend.position="bottom")  
+```
+\caption{\bf{A plot of the correlation matrix for the indices, blue indicate a positive correlation 
+and red negative. the order of the indices and the rectanglur boxes are chosen based on a hierarchical 
+cluster analysis using a set of dissimilarities for the indices being clustered.}}
+\label{cpue:3}
+
+
+
+```{r}
+ggplot(aes(x,y),data=dgs) +   
+      geom_point()+
+      geom_smooth(se=FALSE,method="lm")+
+      geom_abline(aes(slope=1,intercept=0))+
+      xlab("Assessment Estimate")+ylab("Observered CPUE")+
+      facet_wrap(~name,scale="free")
+```
+\caption{\bf{Observed CPUE verses fitted, blue line is a linear resgression fitted to points, black the y=x line.}}
+\label{cpue:5}
+
+
+\clearpage
+\section{Residual Analysis}
+
+Next the fit to the indices is evaluated by plotting the residuals. The first plot is of the observed and the predicted values. Since $U=qB$, i.e. the index is assumed to be proportional to stock size the points should fall either side of the $y=x$ line.    
+
+\caption{\bf{Observed CPUE verses fitted, blue line is a linear resgression fitted to points, black the y=x line.}}
+\label{residual:1}
+
+
+Departures from the assumption that the index is proportional to the stock can also be seen by plotting the residuals by time. 
+\begin{figure}\begin{center}
+```{r}
+dat=ddply(dgs, .(name), transform, residual=diags:::stdz(residual,na.rm=T))
+
+ggplot(aes(year,residual),data=dat) +
+  geom_hline(aes(yintercept=0))      +
+  geom_point()                       +
+  geom_linerange(aes(year,ymin=0,ymax=residual))                       +
+  stat_smooth(,method="loess",se=T,fill="blue", alpha=0.1)  +
+  facet_wrap(~name,scale="free",ncol=2)  
+```
+\caption{\bf{Residuals by year, with lowess smoother and SEs.}}
+\label{residual:2}
+
+
+Autocorrelated residuals may mean that the estimated parameters are biased, autocorrelation can be checked by plotting the residuals against each other with a lag e.g.
+\begin{figure}\begin{center}
+```{r}
+ggplot(dgs)                                              +
+  geom_point( aes(residual,residualLag))                  +
+  stat_smooth(aes(residual,residualLag),method="lm",se=T,fill="blue", alpha=0.1)      +
+  geom_hline(aes(yintercept=0))                           +
+  facet_wrap(~name,scale="free",ncol=3)                   +
+  xlab(expression(Residual[t])) + 
+  ylab(expression(Residual[t+1])) 
+```
+\caption{\bf{Plot of autocorrelation, i.e. $residual_{t+1}$ verses $residual_{t}$.}}
+\label{residual:3}
+
+
+The error dostribution can be checked by plotting the observed and the predicted quantiles for a given distribution e.g. for the normal distributuion
+\begin{figure}\begin{center}
+```{r}
+ggplot(dgs)                                           +
+  geom_point( aes(qqx,qqy))                            +
+  stat_smooth(aes(qqx,qqHat),method="lm",se=T,fill="blue", alpha=0.1)         +
+  facet_wrap(~name)          
+```
+\caption{\bf{Quantile-quantile plot to compare residual distribution with the normal distribution.}}
+\label{residual:4}
+
+
+The variance 
+\begin{figure}\begin{center}
+```{r}
+ggplot(aes(yhat, residual),data=dgs)   +
+  geom_hline(aes(yintercept=0))         +
+  geom_point()                          +
+  stat_smooth(method="loess",span=.9,fill="blue", alpha=0.1)   +
+  facet_wrap(~name,scale="free",ncol=3) 
+```
+\caption{\bf{Plot of residuals against fitted value, to check variance relationship.}}
+\label{residual:5}
+
+
+\clearpage
+\section{Standardised CPUE}
+
+Most CPUE series used in stock assessment have been standardised using a Generalised Linear Model (GLM). This
+requires choosing an appropriate error distribution, variance function andlink function \cite{mccullagh1989generalized}.
+
+The best way to check these assumptions are by plotting, best
+performed for a model that included all the main factors (i.e the most-complex model) since if the most
+complex model isnt a reasonable fit, then any simpler models that are selected will fit adequately because if they
+didn't they wouldn't be selected. 
+
+Going clockwise from the top left in figure~\ref{glm} the first panel is a q-q plot to check that the residuals
+follow a normal distribution, the standardised deviance residuals are then plotted against the fitted values to check for
+systematic departures from the assumptions underlying the error distribution, then thethe absolute values of the
+residuals against the fitted values as a check of the assumed variance function and finally the dependent variable
+against the linear predictor function as a check of the assumed link function \cite{ortiz2004alternative}.
+
+```{r}
+library(ggplot2)
+library(diags)
+library(plyr)
+library(dplyr)
+library(GGally)
+library(stringr)
+dirVPA="/home/laurie/ownCloud/GVYP_VPA/BFTAss/Analysis/vpa/east/reported/med"
+
+dgs=diags:::diags.vpa2box(file.path(dirVPA,"MINUS0.R"))
+dgs=cbind(dgs[,-(3:4)],(ddply(dgs,.(name),with, broomify(lm(y~x-1)))))
+dgs=transform(dgs,yhat=y+residual)
+  
+lm_with_cor <- function(data, mapping, ..., method = "pearson") {
+    x <- data[[deparse(mapping$x)]]
+    y <- data[[deparse(mapping$y)]]
+    cor <- cor(x, y, method = method)
+    ggally_smooth_lm(data, mapping, ...) +
+      ggplot2::geom_label(
+        data = data.frame(
+          x = min(x, na.rm = TRUE),
+          y = max(y, na.rm = TRUE),
+          lab = round(cor, digits = 3)
+        ),
+        mapping = ggplot2::aes(x = x, y = y, label = lab, color = NULL),
+        hjust = 0, vjust = 1,
+        size = 5, fontface = "bold"
+      )
+  }
+  
+ggduo(dgs,c("year","y"),c("residual",".fitted"),
+        mapping=aes(color=name),
+  types = list(continuous = wrap(lm_with_cor, alpha = 0.25)),
+  showStrips = FALSE,
+  title = "",
+  xlab = "",
+  ylab = "",
+  #legend = c(5,2)
+  ) +
+  theme(legend.position = "bottom")
+ 
+ ggplot(melt(dgs[,c("name","year","residual",".hat",".cooksd",".sigma")],id=c("name","year")))+
+    geom_point(aes(year,value))+
+    facet_grid(variable~name,scale="free",space="free_x")+
+    scale_x_continuous(breaks=seq(1950,2010,10))+
+    theme(axis.text.x = element_text(angle = 90, hjust = 1))
+```
+
+[Back to Top](#top)
+
+
+[More information](#More information)
+
+* You can submit bug reports, questions or suggestions on `FLPKG` at the `FLPKG` issue page ^[<https://github.com/flr/FLPKG/issues>], or on the *FLR* mailing list.
+* Or send a pull request to <https://github.com/flr/FLPKG/>
+* For more information on the FLR Project for Quantitative Fisheries Science in R, visit the FLR webpage ^[<http://flr-project.org>].
+* The latest version of `FLPKG` can always be installed using the `devtools` package, by calling
+```{r, devtools, echo=TRUE, eval=FALSE}
+	library(devtools)
+	install_github('flr/FLPKG')
+	
+options(warn=warn)
+sink()
+```
+
+
+## Software Versions
+
+* `r version$version.string`
+* FLCore: `r packageVersion('FLCore')`
+* FLPKG: `r # packageVersion('FLPKG')`
+* **Compiled**: `r date()`
+* **Git Hash**: `r system("git log --pretty=format:'%h' -n 1", intern=TRUE)`
+
+## Author information
+
+**Laurence KELL**. laurie.kell.es
+
+# References {#References}
+
+
+[Back to Top](#top)
