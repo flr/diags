@@ -15,8 +15,7 @@
   ...
 }}
 \description{
-#' An example dataset with catch and effort by year, month, week and fleet based on North 
+An example dataset with catch and effort by year, month, week and fleet based on North 
 Atlantic Albacore, derived from the ICCAT multifan-CL assessment
 }
 \keyword{data}
-

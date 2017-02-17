@@ -21,4 +21,3 @@ Creates a path to a file in a package subdirectory
 \examples{
 x=1
 }
-
