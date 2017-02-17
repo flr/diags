@@ -1,7 +1,0 @@
-exportMethods(diags)
-exportMethods(readCpue)
-exportMethods(writeCpue)
-export(minMax)
-export(stdz)
-export(theme_ms)
-export(read.cas)
