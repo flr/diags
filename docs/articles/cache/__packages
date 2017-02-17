@@ -1,0 +1,12 @@
+base
+diags
+knitr
+ggplot2
+plyr
+foreach
+gam
+dplyr
+reshape
+GGally
+reshape2
+corrplot

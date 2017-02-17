@@ -3,8 +3,8 @@ Type: Package
 Title: Diagnostics for stock assessment methods
 Version: 2.0.1
 Date: 2017-02-17
-Author: Laurence Kell
-Maintainer: Laurence Kell <LaurieKell@iccat.int>
+Authors@R: c(
+  person("Laurence T.", "Kell", email = "laurie@kell.e", role = "cre"))
 Description: Stock assessment is conducted main using a variety of standalone
     executable programs, each with their own input and output file formats. This
     package provides a set of common methods for reading these data into R, plotting
