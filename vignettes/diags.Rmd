@@ -1,13 +1,17 @@
 ---
-title: "Stock Assessment Diagnostics"
+title: "Stock Assessment Diagnostics with diags"
 author: "Laurence Kell"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
+<<<<<<< HEAD
 output: rmarkdown:::html_vignette
+=======
+output: rmarkdown::html_vignette
+>>>>>>> ed10c68ee31614d94100be6b76dceccc5b5034ef
 vignette: >
+  %\VignetteIndexEntry{diags}
   %\VignetteEngine{knitr::rmarkdown}
-  %\VignetteIndexEntry{Vignette Title}
-  %\VignetteEncoding{UTF-8}
-bibliography: /home/laurie/bib/refs.bib
+  \usepackage[utf8]{inputenc}
+bibliography: refs.bib
 tags: FLPKG FLR
 license: Creative Commons Attribution-ShareAlike 4.0 International
 ---
@@ -31,7 +35,6 @@ opts_chunk$set(echo    =!TRUE,
 
 
 ```{r, pkgs, echo=FALSE, message=FALSE}
-sink(NULL)
 options(warn=-1)
 
 library(ggplot2)
@@ -146,8 +149,7 @@ library(diags)
 There is an example dataset for East Atlantic Bluefin, both for illustration and as a test dataset. Alternatively users can load their own data.
 
 ```{r data-yft,echo=TRUE,eval=!FALSE}
-load("/home/laurie/Desktop/flr/diags/data/dgs.RData")
-#data(dgs)
+data(dgs)
 ```
 
 The dataset contains fits and residuals for the catch per unit effort (CPUE) used to calibarte a virtual population analysis. 
@@ -257,8 +259,6 @@ One common definition, known as the Pearson residual, is as follows, however the
 There may be other analyses that are useful to run on the raw data, e.g. running a GAM to calculate a common trend that the individual series can be compared to. I.e. to look for trends that may be different from the others. This can be done by fitting a smoother to year and a series effect, the latter scales the series so that they can be compared, e.g.
 
 ```{r}
-load("/home/laurie/Desktop/flr/diags/data/dgs.RData")
-
 library(gam)
 library( plyr)
 library(dplyr)
@@ -460,18 +460,15 @@ systematic departures from the assumptions underlying the error distribution, th
 residuals against the fitted values as a check of the assumed variance function and finally the dependent variable
 against the linear predictor function as a check of the assumed link function \cite{ortiz2004alternative}.
 
-```{r}
+```{r, eval=FALSE}
 library(ggplot2)
 library(diags)
 library(plyr)
 library(dplyr)
 library(GGally)
 library(stringr)
-dirVPA="/home/laurie/ownCloud/GVYP_VPA/BFTAss/Analysis/vpa/east/reported/med"
 
-dgs=diags:::diags.vpa2box(file.path(dirVPA,"MINUS0.R"))
-dgs=cbind(dgs[,-(3:4)],(ddply(dgs,.(name),with, broomify(lm(y~x-1)))))
-dgs=transform(dgs,yhat=y+residual)
+data(dgs)
   
 lm_with_cor <- function(data, mapping, ..., method = "pearson") {
     x <- data[[deparse(mapping$x)]]
@@ -517,12 +514,9 @@ ggduo(dgs,c("year","y"),c("residual",".fitted"),
 * Or send a pull request to <https://github.com/flr/FLPKG/>
 * For more information on the FLR Project for Quantitative Fisheries Science in R, visit the FLR webpage ^[<http://flr-project.org>].
 * The latest version of `FLPKG` can always be installed using the `devtools` package, by calling
+
 ```{r, devtools, echo=TRUE, eval=FALSE}
-	library(devtools)
-	install_github('flr/FLPKG')
-	
-options(warn=warn)
-sink()
+	devtools::install_github('flr/FLPKG')
 ```
 
 
