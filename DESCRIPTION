@@ -1,8 +1,8 @@
 Package: diags
 Type: Package
 Title: Diagnostics for stock assessment methods
-Version: 2.0.0
-Date: 2012-11-01
+Version: 2.2.0
+Date: 2016-2-20
 Author: Laurence Kell
 Maintainer: Laurence Kell <LaurieKell@iccat.int>
 Description: Stock assessment is conducted main using a variety of standalone

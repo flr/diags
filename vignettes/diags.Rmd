@@ -2,7 +2,7 @@
 title: "Stock Assessment Diagnostics"
 author: "Laurence Kell"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-output: rmarkdown:::html_document
+output: rmarkdown:::html_vignette
 vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteIndexEntry{Vignette Title}
@@ -51,7 +51,7 @@ In linear regression, abnormal points can be defined as when there is a large  d
 
       Influence = Discrepency X Leverage
 
-Outliers can be identified using studentized residuals and quantile-comparison plots, leverage can be assessed by exploring the hat-values, and influence by calculating DFBeta or Cook’s Distance. While the bias in parameter estimates can be evaluated using simulation, e.g. the bootstrap or jackknife.
+Outliers can be identified using studentized residuals and quantile-comparison plots, leverage can be assessed by exploring the hat-values, and influence by calculating DFBeta or Cook???s Distance. While the bias in parameter estimates can be evaluated using simulation, e.g. the bootstrap or jackknife.
 
 ## Outliers
 
@@ -83,12 +83,12 @@ Calculation of Cook's D (Optional)
 
 The first step in calculating the value of Cook's D for an observation is to predict all the scores in the data once using a regression equation based on all the observations and once using all the observations except the observation in question. The second step is to compute the sum of the squared differences between these two sets of predictions. The final step is to divide this result by 2 times the MSE (see the section on partitioning the variance).
 
-•
+???
 Influence Plots
 (or bubble plots) are useful because 
 they display the studentized residuals, hat-values and 
-Cook’s distances all on the same plot
-•  Joint influence is best assessed using 
+Cook???s distances all on the same plot
+???  Joint influence is best assessed using 
 Added-Variable 
 Plots
 (or partial-regression plots)
