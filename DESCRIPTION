@@ -4,7 +4,7 @@ Title: Diagnostics for stock assessment methods
 Version: 2.2.0
 Date: 2016-2-20
 Author: Laurence Kell
-Maintainer: Laurence Kell <LaurieKell@iccat.int>
+Maintainer: Laurence Kell <Laurie@kell.es>
 Description: Stock assessment is conducted main using a variety of standalone
     executable programs, each with their own input and output file formats. This
     package provides a set of common methods for reading these data into R, plotting
@@ -20,6 +20,7 @@ Suggests:
     RCurl,
     gam,
     GGally
+VignetteBuilder: knitr
 Collate:
     'diags-2box.R'
     'diags-aspic.R'
@@ -45,4 +46,4 @@ Collate:
     'data.R' 
     'diags-funcs.R'
     'io.VPA2BoxV2.R'
-RoxygenNote: 5.0.1
+RoxygenNote: 6.0.1

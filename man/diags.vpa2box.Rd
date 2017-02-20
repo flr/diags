@@ -2,8 +2,8 @@
 % Please edit documentation in R/diags-2box.R
 \name{diags.vpa2box}
 \alias{diags.vpa2box}
-\alias{diags.vpa2box,character-method}
 \alias{diags.vpa2box-method}
+\alias{diags.vpa2box,character-method}
 \title{diags.vpa2box}
 \usage{
 diags.vpa2box(file, ...)
@@ -25,4 +25,3 @@ diags.vpa2box(file)
 } 
 
 }
-
