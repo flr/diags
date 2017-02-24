@@ -7,7 +7,7 @@ navbar:
     href: http://flr-project.org/
   left:
   - text: Source
-    href: http://github.com/flr/FLCore
+    href: http://github.com/flr/FLdiags
     icon: fa-github fa-lg
   - text: Reference
     href: reference/index.html
@@ -15,11 +15,3 @@ navbar:
     href: articles/index.html
   - text: News
     href: news/index.html
-
-# reference:
-#   - title: "Classes"
-#     desc: "S4 classes"
-#     contents: 
-#       - FLQuant
-#       - FLStock
-#       - FLIndex

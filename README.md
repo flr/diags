@@ -1,8 +1,8 @@
 # diags
 - Version: 2.2.0
 - Date: 2016-2-20
-- Author: %USER%
-- Maintainer: %USER2% <laurie@kell.es>
+- Author: Laurence T. Kell <laurie@kell.es>
+- Maintainer: Laurence T. Kell <laurie@kell.es>
 - Repository: <https://github.com/flr/diags/>
 - Bug reports: <https://github.com/flr/diags/issues>
 
