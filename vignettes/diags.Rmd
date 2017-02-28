@@ -2,11 +2,7 @@
 title: "Stock Assessment Diagnostics with diags"
 author: "Laurence Kell"
 date: "`r format(Sys.time(), '%d %B, %Y')`"
-<<<<<<< HEAD
 output: rmarkdown:::html_vignette
-=======
-output: rmarkdown::html_vignette
->>>>>>> ed10c68ee31614d94100be6b76dceccc5b5034ef
 vignette: >
   %\VignetteIndexEntry{diags}
   %\VignetteEngine{knitr::rmarkdown}
