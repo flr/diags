@@ -46,4 +46,5 @@ Collate:
     'data.R' 
     'diags-funcs.R'
     'io.VPA2BoxV2.R'
+    'read-VPA2Box-FLIndices.R'
 RoxygenNote: 6.0.1
