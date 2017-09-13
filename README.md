@@ -1,6 +1,6 @@
 # diags
-- Version: 2.2.0
-- Date: 2016-2-20
+- Version: 2.2.1
+- Date: 2017-09-13
 - Author: Laurence T. Kell <laurie@kell.es>
 - Maintainer: Laurence T. Kell <laurie@kell.es>
 - Repository: <https://github.com/flr/diags/>
@@ -28,7 +28,7 @@ or download from the [diags releases page](https://github.com/flr/diags/releases
 - [All release](https://github.com/flr/diags/releases/)
 
 ## License
-Copyright (c) %YEAR% Somebody. Released under the [%LICENCE%](%LICENCEURL%).
+Copyright (c) 2015-17 Laurie Kell. Released under the [GPL v2](http://www.gnu.org/licenses/gpl-2.0.html).
 
 ## Contact
 You are welcome to:
