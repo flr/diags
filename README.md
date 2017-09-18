@@ -1,8 +1,8 @@
 # diags
 - Version: 2.2.1
 - Date: 2017-09-13
-- Author: Laurence T. Kell <laurie@kell.es>
-- Maintainer: Laurence T. Kell <laurie@kell.es>
+- Author: Laurence T. Kell <laurie@seaplusplus.co.uk>
+- Maintainer: Laurence T. Kell <laurie@seaplusplus.co.uk>
 - Repository: <https://github.com/flr/diags/>
 - Bug reports: <https://github.com/flr/diags/issues>
 
@@ -35,5 +35,5 @@ You are welcome to:
 
 - Submit suggestions and bug-reports at: <https://github.com/flr/diags/issues>
 - Send a pull request on: <https://github.com/flr/diags/>
-- Compose a friendly e-mail to: <laurie@kell.es>
+- Compose a friendly e-mail to: <laurie@seaplusplus.co.uk>
 
