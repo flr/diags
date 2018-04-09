@@ -458,7 +458,7 @@ datfromstr <-
 mfclVcov=function(fileVar,fileCor){
   ## get names of variables
   ret      =list()
-  var      =scan(fileVar,what=as.character(),sep="\n")[-(1:3)]
+  var      =scan(fileVar,what=as.character(),sep="\n",quiet=TRUE[-(1:3)])
   
   ## names
   ret$names=unlist(lapply(var, function(x) strsplit(str_trim(x)," +")[[1]][4]))

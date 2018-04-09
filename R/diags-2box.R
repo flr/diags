@@ -36,14 +36,14 @@ utils::globalVariables(c("y"))
 setGeneric('diags.vpa2box',   function(file,...) standardGeneric('diags.vpa2box'))
 setMethod('diags.vpa2box',    signature(file='character'), function(file,...){
 
-    tab5<-scan(file,what="",sep="\n")
-    tab5<-tab5[grep("TABLE 5.",tab5):length(tab5)]
-
-    pos  <-grep("Chi-sq. discrepancy=",tab5)
-    nms  <-substr(tab5[pos-7],9,30)
-    str  <-pos+5
-    end  <-grep("Selectivities",tab5)-2
-
+  tab5<-scan(file,what="",sep="\n")
+  tab5<-tab5[grep("TABLE 5.",tab5):length(tab5)]
+  
+  pos  <-grep("Chi-sq. discrepancy=",tab5)
+  nms  <-substr(tab5[pos-7],9,30)
+  str  <-pos+5
+  end  <-grep("Selectivities",tab5)-2
+  
     fn<-function(uDiag) {
         uDiag<-unlist(strsplit(uDiag," "))
         as.numeric(uDiag[nchar(uDiag)>0])}
@@ -107,7 +107,7 @@ setMethod('diags.vpa2box',    signature(file='character'), function(file,...){
     return(uDiag)})
   
 getPos<-function(file){
-    lns   <-scan(file,what="",sep="\n")
+    lns   <-scan(file,what="",sep="\n",quiet=TRUE)
 
     n     <-length(lns)
     minus1<-(1:n)[substr(lns,1,2)=="-1"]
@@ -129,25 +129,25 @@ getIdx<-function(x){
   posWaa  <-8
   
   # range
-  t.        <-as.numeric(scan(x,skip=start[posRng]-1,nlines=end[posRng]-start[posRng]+1,what=character()))
+  t.        <-as.numeric(scan(x,skip=start[posRng]-1,nlines=end[posRng]-start[posRng]+1,what=character(),quiet=TRUE))
   rng       <-t.[!is.na(t.)]
   names(rng)<-c("minyear","maxyear","min","max","plusgroup","pgproj")[1:length(rng)]
   
   # Specifications
-  t.        <-as.numeric(scan(x,skip=start[posSpc]-1,nlines=end[posSpc]-start[posSpc]+1,what=character()))
+  t.        <-as.numeric(scan(x,skip=start[posSpc]-1,nlines=end[posSpc]-start[posSpc]+1,what=character(),quiet=TRUE))
   specs     <-t.[!is.na(t.)]
   specs     <-as.data.frame(t(array(specs,c(7,length(specs)/7))))
   names(specs)<-c("index","pdf","units","vul","timing","min","max")
 
   # index
-  idx       <-as.numeric(scan(x,skip=start[indexPos]-1,nlines=end[indexPos]-start[indexPos]+1,what=character()))
+  idx       <-as.numeric(scan(x,skip=start[indexPos]-1,nlines=end[indexPos]-start[indexPos]+1,what=character(),quiet=TRUE))
   idx       <-idx[!is.na(idx)]
   n         <-length(idx)
   idx       <-as.data.frame(t(array(idx,dim=c(4,n/4))))
   names(idx)<-c("index","year","data","cv")
 
   # Vulnerabilities
-  vul       <-as.numeric(scan(x,skip=start[posVul]-1,nlines=end[posVul]-start[posVul]+1,what=character()))
+  vul       <-as.numeric(scan(x,skip=start[posVul]-1,nlines=end[posVul]-start[posVul]+1,what=character(),quiet=TRUE))
   vul       <-vul[!is.na(vul)]
   n         <-length(vul)
   nvar      <-diff(rng[c("min","max")])+3
@@ -159,7 +159,7 @@ getIdx<-function(x){
   names(vul)[4]<-"data"
 
   # catch weight
-  waa       <-as.numeric(scan(x,skip=start[posWaa]-1,nlines=end[posWaa]-start[posWaa]+1,what=character()))
+  waa       <-as.numeric(scan(x,skip=start[posWaa]-1,nlines=end[posWaa]-start[posWaa]+1,what=character(),quiet=TRUE))
   waa       <-waa[!is.na(waa)]
   n         <-length(waa)
   nvar      <-diff(rng[c("min","max")])+3

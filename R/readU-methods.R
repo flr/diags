@@ -26,7 +26,7 @@ setGeneric('readCpue',   function(file,method,...) standardGeneric('readCpue'))
 
 setMethod('readCpue',  signature(file='character',method="missing"), function(file,method=method,...) {
   
-  ln=tolower(scan(file,nlines=1,what=character(),sep="\n"))
+  ln=tolower(scan(file,nlines=1,what=character(),sep="\n",quiet=TRUE))
   
   if (length(grep("multifan",ln))>0 | length(grep("mfcl",ln))>0)
     method="mfcl"

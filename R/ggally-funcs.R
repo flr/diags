@@ -48,7 +48,7 @@ library(stringr)
 
 dirVPA="/home/laurie/Desktop/kobe/inputs/bfte/2014/vpa/reported/med"
 
-r1=diags:::diagsVpa2box(file.path(dirVPA,"MINUS0.R"))
+r1=diags:::diags.vpa2box(file.path(dirVPA,"MINUS0.R"))
 
 names(r1)
 

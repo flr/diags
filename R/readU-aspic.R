@@ -26,12 +26,12 @@ ac=as.character
 iUAspic=function(x){
     
   ## Years
-  uYrs=scan(x,sep="\n",what=character())[22]
+  uYrs=scan(x,sep="\n",what=character(),quiet=TRUE)[22]
   uYrs=substr(uYrs,1,regexpr("#",uYrs)[1]-1)  
   uYrs=as.numeric(strsplit(uYrs," ")[[1]])[1]
   
   ## Serie lengths
-  uN=scan(x,sep="\n",what=character())[12]
+  uN=scan(x,sep="\n",what=character(),quiet=TRUE)[12]
   uN=substr(uN,1,regexpr("#",uN)[1]-1)  
   uN=as.numeric(strsplit(uN," ")[[1]])[1]
   uN=rep(uYrs,uN)
@@ -40,7 +40,7 @@ iUAspic=function(x){
   #uN=strsplit(uN," ")[[1]]
   #uN=as.numeric(uN)
   
-  uDat=str_trim(scan(x,sep="\n",what=character())[-(1:22)])
+  uDat=str_trim(scan(x,sep="\n",what=character(),quiet=TRUE)[-(1:22)])
   uDat=maply(uDat,function(x) gsub("\"","",x))
   names(uDat)=NULL
   

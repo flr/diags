@@ -2,7 +2,10 @@
 utils::globalVariables(c("qqnorm"))
 utils::globalVariables(c("sd"))
 
-stdz  <-function(x,na.rm=TRUE) ((x-mean(x,na.rm=na.rm))/sd(x,na.rm=na.rm))
+stdz  <-function(x,na.rm=TRUE,mean=0) 
+  if (mean==0) (x-mean(x,na.rm=na.rm))/sd(x,na.rm=na.rm) else         
+               (x/mean(x,na.rm=na.rm))/sd(x,na.rm=na.rm)
+
 minMax<-function(x,na.rm=TRUE) (x-min(x,na.rm=na.rm))/diff(range(x,na.rm=na.rm))
 
 ## local function to calculated expected QQ line

@@ -12,7 +12,7 @@ utils::globalVariables(c("diagsFn"))
                           verbose   =FALSE, 
                           printstats=FALSE, 
                           hidewarn  =TRUE, 
-                          NoCompOK  =TRUE)$cpue,select=c(FleetName,Yr,Obs,Exp,Dev), !is.na(Dev))
+                          NoCompOK  =TRUE)$cpue,select=c(Name,Yr,Obs,Exp,Dev), !is.na(Dev))
   names(res)=c("index","year","obs","hat","residual")
    
   res=subset(ddply(res,.(index),diagsFn),!is.na(residual))

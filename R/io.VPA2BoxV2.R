@@ -261,7 +261,6 @@ partialF<-function(idx,object,years){
   
   res}
 
-
 partialFn<-function(object,stk){
   age=ac(range(object)["min"]:range(object)["max"])
   yrs=ac(range(object)["minyear"]:range(object)["maxyear"])
@@ -273,7 +272,7 @@ partialFn<-function(object,stk){
   pf  =faa%*%paa%/%caa
   
   if (dim(paa)[1]==1)
-    FLQuant(1,dimnames=list(year=1,age=dmns$age))
+    res=FLQuant(1,dimnames=list(year=1,age=age))
   else{
     res=apply(pf[,yrs],1,function(x) sum(x))
     res=res/max(res)
@@ -288,22 +287,31 @@ cpueHat<-function(object,pf,vpa){
   
   sweep(hat,6,apply(hat,6,mean),"/")}
 
-uHat<-function(object,stk){
+uHat<-function(object,stk,units="n"){
   
   age=ac(range(object)["min"    ]:range(object)["max"])
   yrs=ac(range(object)["minyear"]:range(object)["maxyear"])
   
-  if (tolower(substr(type(object)[2],1,1))=="b"){
+  if (tolower(substr(type(object),1,1))=="b"){
     pf =partialFn(object,stk)
     
-    if (tolower(substr(type(object)[1],1,1))=="w")
+    if (tolower(substr(units(index(object)),1,1))=="b")
       hat=apply(stock.n( stk)[age, yrs]*
-                stock.wt(stk)[age, yrw]%*%pf,c(2,6),sum)
+                stock.wt(stk)[age, yrs]%*%pf,c(2,6),sum)
     else
       hat=apply(stock.n(stk)[age, yrs]%*%pf,c(2,6),sum)
     }
+  
+  if (tolower(substr(type(object),1,1))=="f"){
     
-   hat}
+    if (tolower(substr(type(object)[1],1,1))=="w")
+      hat=apply(stock.n( stk)[age, yrs]*
+                  stock.wt(stk)[age, yrw],c(2,6),sum)
+    else
+      hat=apply(stock.n(stk)[age, yrs],c(2,6),sum)
+  }
+  
+  hat}
 
 hindcast<-function(file,dirPrj,maxyear="missing",plusgroup=40){
   
@@ -311,7 +319,7 @@ hindcast<-function(file,dirPrj,maxyear="missing",plusgroup=40){
   vpaOriginal=vpa
   ages       =dimnames(m(vpa))[[1]]
   nits       =dims(vpa)$iter
-  yrs        =read.table(paste(dirPrj,"SSBMSY-1.STA",sep="/"),header=FALSE,skip=1)[,2]  
+  yrs        =read.table(paste(dirPrj,"SSmsy.STA",sep="/"),header=FALSE,skip=1)[,2]  
   if (!missing(maxyear))  
     yrs=yrs[yrs<=maxyear]
   
@@ -324,9 +332,9 @@ hindcast<-function(file,dirPrj,maxyear="missing",plusgroup=40){
   vpa       =setPlusGroup(vpa,plusgroup)
   vpa       =window(vpa,end=maxyear)
   
-  sel       =paste(dirPrj,"sel.OUT",sep="/")
-  sel       =read.table(sel)
-  sel       =sel[seq(1,dim(sel)[1]-1,2),]
+  sel       =paste(dirPrj,"SELECTIVITY.OUT",sep="/")
+  sel       =read.table(sel,skip=1)
+  sel       =sel[seq(1,dim(sel)[1]-1,2),-(seq(3))]
   sel       =cbind(expand.grid(iter=0:nits,age=ages),data=unlist(c(sel)))
   sel       =as.FLQuant(sel)
   
@@ -345,11 +353,10 @@ hindcast<-function(file,dirPrj,maxyear="missing",plusgroup=40){
   stock(vpa)=computeStock(vpa)
   catch.wt(vpa)=stock.wt(vpa)
   
-  
   ## SOP Wts
   stock.wt(vpa)[,vpaYrs]=stock.wt(vpa)[,vpaYrs]%*%(ssb(vpaOriginal)/ssb(vpa)[,vpaYrs])
   
-  rec  =paste(dirPrj,"RECRT-1.OUT",sep="/")
+  rec  =paste(dirPrj,"RECRT.OUT",sep="/")
   rec  =read.table(rec)
   rec  =melt(rec,id=c("V1","V2"))[,-1]
   names(rec)=c("iter","year","data")
@@ -363,6 +370,8 @@ hindcast<-function(file,dirPrj,maxyear="missing",plusgroup=40){
   catch.wt(vpa)[,    prjYrs]=catch.wt(vpa)[,    max(vpaYrs)]
   stock.wt(vpa)[,    prjYrs]=stock.wt(vpa)[,    max(vpaYrs)]
   discards.wt(vpa)[, prjYrs]=discards.wt(vpa)[, max(vpaYrs)]
+  
+  vpa=fwd(vpa,catch=)
   
   return(vpa)} 
 

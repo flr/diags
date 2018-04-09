@@ -47,7 +47,7 @@ iU2box = function(file,na.strings="NA") {
   i=skip.hash(i)
   index.=array(0,dim=c(skip.until.minus.1(i)-i, 4))
   for (j in i:(skip.until.minus.1(i)-1))
-    index.[j-i+1,]=scan(file,skip=j,nlines=1,nmax=4,quiet=T,na.strings=na.strings)
+    index.[j-i+1,]=scan(file,skip=j,nlines=1,nmax=4,quiet=T,na.strings=na.strings,quiet=TRUE)
   i=skip.until.minus.1(i)+1	   	
   if ((skip.until.minus.1(i)-i-3)>0)
     p.=read.table(file,skip=i,fill=T,nrows=(skip.until.minus.1(i)-i-3),colClasses="numeric",na.strings=na.strings)

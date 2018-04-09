@@ -37,7 +37,7 @@ setMethod('diags',  signature(object='character',method="character"), function(o
   method=tolower(method)
   if (any("2box" == method)) method["2box" == method]="adapt"   
   switch(substr(method[1],1,2),
-         ad=diagsVpa2box( object,...),
+         ad=diags.vpa2box( object,...),
          as=diagUaspic(object,...),
          bs=diagUbsp(  object,...),
          mf=diagUmfcl( object,...),

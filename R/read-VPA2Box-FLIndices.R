@@ -13,7 +13,20 @@ skip.until.minus.1<-function(i,x) {
     i<-i+1
   return(i)}
 
-readVP2BoxIndices<-function(x,na.strings="NA") {
+getFLindexNames<-function(file){
+  tmp=str_trim(scan(file,what=as.character(),sep="\n",quiet=TRUE))
+  flg=laply(tmp,function(x) substr(x,1,1)!="#")
+  tmp=tmp[flg]
+  
+  mrk=seq(dim(ldply(tmp,function(x) substr(x,1,2)=="-1"))[1])[ldply(tmp,function(x) substr(x,1,2)=="-1")[,1]]
+  
+  smry=tmp[(mrk[1]+1):(mrk[2]-1)]
+  res=mdply(smry,function(x) unlist(strsplit(x," ")))[,9]
+  res=maply(res,function(x) gsub("'","",x))
+  
+  res}
+
+readVPA2BoxIndices<-function(x,na.strings="NA") {
 
   #range for stock
   rngStk=c("min"=NA,"max"=NA,"plusgroup"=NA,"minyear"=NA,"maxyear"=NA)
@@ -75,6 +88,7 @@ readVP2BoxIndices<-function(x,na.strings="NA") {
   c("fixed","frac","part","butt")
 
   for (i in seq(dim(rng)[1])){
+    
     range       =unlist(rng[i,6:12])
     names(range)[4:5]=c("minyear","maxyear")
     dmns         =list(age =as.character(range["min"]:range["max"]),
@@ -83,7 +97,9 @@ readVP2BoxIndices<-function(x,na.strings="NA") {
     desc        =paste("Read in from",x)
     type        =c("fixed","frac","part","butt")[rng[i,"type"]]
     distribution=c("lognormal","normal")[rng[i,"pdf"]]
-    index       =as.FLQuant(subset(idx,index==i)[,c("year","data")],units=c("number","biomass")[rng[i,"units"]])
+    index       =as.FLQuant(subset(idx,index==i)[,c("year","data")])
+    units(index)=c("number","biomass")[rng[i,"units"]]
+    
     index.var   =as.FLQuant(transform(subset(idx,index==i),data=se)[,c("year","data")])
     if (i%in%pca[,"index"]){
       catch.n     =as.FLQuant(subset(pca,index==i)[,c("age","year","data")])
@@ -110,5 +126,9 @@ readVP2BoxIndices<-function(x,na.strings="NA") {
                      effort=effort,index.q=index.q,
                      sel.pattern=sel.pattern)
     }
+  
+  names(rtn)=getFLindexNames(x)
+  for (i in names(rtn))
+    name(rtn[[i]])=i
   
   rtn}

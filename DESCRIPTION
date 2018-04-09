@@ -47,4 +47,9 @@ Collate:
     'diags-funcs.R'
     'io.VPA2BoxV2.R'
     'read-VPA2Box-FLIndices.R'
+    'jackknife-vpa2box.R'
+    'jackknife-ss.R'
+    'residuals-nr.R'
+    'ss-jitter.R'
+    'tmpDir.R'
 RoxygenNote: 6.0.1
