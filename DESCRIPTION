@@ -43,7 +43,7 @@ Collate:
     'diags-mcmc.R'
     'ioICCAT.R'
     'ggally-funcs.R'
-    'data.R' 
+    'data.R'
     'diags-funcs.R'
     'io.VPA2BoxV2.R'
     'read-VPA2Box-FLIndices.R'
@@ -52,4 +52,5 @@ Collate:
     'residuals-nr.R'
     'ss-jitter.R'
     'tmpDir.R'
-RoxygenNote: 6.0.1
+    'pErr.R'
+RoxygenNote: 5.0.1

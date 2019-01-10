@@ -6,13 +6,12 @@ setGeneric('aav', function(object, ...)
 setGeneric('antiCurve', function(object, ...)
   standardGeneric('antiCurve'))
 
-setMethod('aav', signature(object='numeric'),
- function(object){
+avFn<-function(object){
   
   o1 =object[-1]
   o2 =object[-length(object)]
   
-  return(abs(o1-o2)/o1)})
+  return(abs(o1-o2)/o1)}
 
 setMethod('aav', signature(object='data.frame'),
  function(object){
@@ -20,7 +19,7 @@ setMethod('aav', signature(object='data.frame'),
   yrs   =object$year
   object=object[order(yrs),]
   
-  res  =apply(object, 2, av)
+  res  =apply(object, 2, avFn)
   res  =res[!(names(res) %in% "year")]
 
   return(res)})

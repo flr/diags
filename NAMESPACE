@@ -2,3 +2,4 @@
 
 export(diags.vpa2box)
 export(fget)
+export(read.vpa2box)

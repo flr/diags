@@ -6,7 +6,8 @@ stdz  <-function(x,na.rm=TRUE,mean=0)
   if (mean==0) (x-mean(x,na.rm=na.rm))/sd(x,na.rm=na.rm) else         
                (x/mean(x,na.rm=na.rm))/sd(x,na.rm=na.rm)
 
-minMax<-function(x,na.rm=TRUE) (x-min(x,na.rm=na.rm))/diff(range(x,na.rm=na.rm))
+minMax<-function(x,y=x,na.rm=TRUE)
+  (y-min(x,na.rm=na.rm))/diff(range(x,na.rm=na.rm))
 
 ## local function to calculated expected QQ line
 qqLine <- function(x,y){ 
@@ -25,7 +26,7 @@ qqLine <- function(x,y){
 
 diagsFn=function(res){
       res$residualLag <- c(res$residual[-1],NA)
-     
+   
       try({qq.     <- qqnorm(res$residual,plot.it=FALSE,na.rm=T)
       res$qqx <- qq.$x
       res$qqy <- qq.$y
