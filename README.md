@@ -1,8 +1,8 @@
 # diags
-- Version: 2.2.0
-- Date: 2016-2-20
-- Author: Laurence T. Kell <laurie@kell.es>
-- Maintainer: Laurence T. Kell <laurie@kell.es>
+- Version: 2.2.1
+- Date: 2017-09-13
+- Author: Laurence T. Kell <laurie@seaplusplus.co.uk>
+- Maintainer: Laurence T. Kell <laurie@seaplusplus.co.uk>
 - Repository: <https://github.com/flr/diags/>
 - Bug reports: <https://github.com/flr/diags/issues>
 
@@ -28,12 +28,12 @@ or download from the [diags releases page](https://github.com/flr/diags/releases
 - [All release](https://github.com/flr/diags/releases/)
 
 ## License
-Copyright (c) %YEAR% Somebody. Released under the [%LICENCE%](%LICENCEURL%).
+Copyright (c) 2015-17 Laurie Kell. Released under the [GPL v2](http://www.gnu.org/licenses/gpl-2.0.html).
 
 ## Contact
 You are welcome to:
 
 - Submit suggestions and bug-reports at: <https://github.com/flr/diags/issues>
 - Send a pull request on: <https://github.com/flr/diags/>
-- Compose a friendly e-mail to: <laurie@kell.es>
+- Compose a friendly e-mail to: <laurie@seaplusplus.co.uk>
 

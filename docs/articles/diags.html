@@ -29,7 +29,7 @@
     <div id="navbar" class="navbar-collapse collapse">
       <ul class="nav navbar-nav">
 <li>
-  <a href="http://github.com/flr/FLCore">
+  <a href="http://github.com/flr/FLdiags">
     <span class="fa fa-github fa-lg"></span>
      
     Source
@@ -64,7 +64,7 @@
       <h1>Stock Assessment Diagnostics with diags</h1>
                         <h4 class="author">Laurence Kell</h4>
             
-            <h4 class="date">17 February, 2017</h4>
+            <h4 class="date">13 September, 2017</h4>
           </div>
 
     
@@ -75,7 +75,7 @@
 <p>Many stock assessment methods use linear regression e.g. for calibration when using CPUE as trends of relative abundance or as part of emprirical harvest control rules. Regression models, however, are vulnerable to abnormal points, which may cause bias, affect estimation accuracy and result in poor prediction skill. This is especially true when the number of observations are small as means there are fewer cases to counter them. Even if there are there many cases miscodes and excluding important explanatory variables can influence the regression model. It is important therefore to identify influential points and explore there impacts</p>
 <p>In linear regression, abnormal points can be defined as when there is a large descrepency between the observed Y and predicted Y value given their X value (outlier) and when they have an unusual X-value (leverage). The influence of a point is a function of the discrepency and leverage, e.g.</p>
 <pre><code>  Influence = Discrepency X Leverage</code></pre>
-<p>Outliers can be identified using studentized residuals and quantile-comparison plots, leverage can be assessed by exploring the hat-values, and influence by calculating DFBeta or Cook’s Distance. While the bias in parameter estimates can be evaluated using simulation, e.g. the bootstrap or jackknife.</p>
+<p>Outliers can be identified using studentized residuals and quantile-comparison plots, leverage can be assessed by exploring the hat-values, and influence by calculating DFBeta or Cook???s Distance. While the bias in parameter estimates can be evaluated using simulation, e.g. the bootstrap or jackknife.</p>
 <div id="outliers" class="section level2">
 <h2 class="hasAnchor">
 <html><body><a href="#outliers" class="anchor"> </a></body></html>Outliers</h2>
@@ -99,7 +99,7 @@
 <p>An observation is influentila if when it is omitted the predictions for the other observations differ. ## Influence</p>
 <p>An observation’s influence is a function of the leverage and the d Calculation of Cook’s D (Optional)</p>
 <p>The first step in calculating the value of Cook’s D for an observation is to predict all the scores in the data once using a regression equation based on all the observations and once using all the observations except the observation in question. The second step is to compute the sum of the squared differences between these two sets of predictions. The final step is to divide this result by 2 times the MSE (see the section on partitioning the variance).</p>
-<p>• Influence Plots (or bubble plots) are useful because they display the studentized residuals, hat-values and Cook’s distances all on the same plot • Joint influence is best assessed using Added-Variable Plots (or partial-regression plots)</p>
+<p>??? Influence Plots (or bubble plots) are useful because they display the studentized residuals, hat-values and Cook???s distances all on the same plot ??? Joint influence is best assessed using Added-Variable Plots (or partial-regression plots)</p>
 </div>
 </div>
 <div id="bias" class="section level2">
@@ -251,13 +251,13 @@ Outlier detection criteria  A point beyond an inner fence on either side is cons
 <h2 class="hasAnchor">
 <html><body><a href="#software-versions" class="anchor"> </a></body></html>Software Versions</h2>
 <ul>
-<li>R version 3.3.2 (2016-10-31)</li>
-<li>FLCore: 2.6.0.20170130</li>
+<li>R version 3.4.1 (2017-06-30)</li>
+<li>FLCore: 2.6.5</li>
 <li>FLPKG:</li>
 <li>
-<strong>Compiled</strong>: Fri Feb 17 11:27:49 2017</li>
+<strong>Compiled</strong>: Wed Sep 13 13:51:40 2017</li>
 <li>
-<strong>Git Hash</strong>: cbbe94a</li>
+<strong>Git Hash</strong>: a43de4a</li>
 </ul>
 </div>
 <div id="author-information" class="section level2">

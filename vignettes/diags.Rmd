@@ -6,7 +6,6 @@ output: rmarkdown:::html_vignette
 vignette: >
   %\VignetteIndexEntry{diags}
   %\VignetteEngine{knitr::rmarkdown}
-  \usepackage[utf8]{inputenc}
 bibliography: refs.bib
 tags: FLPKG FLR
 license: Creative Commons Attribution-ShareAlike 4.0 International
