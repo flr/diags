@@ -27,3 +27,4 @@ Writes catch per unit effort in a data frame to a variety of stock assessment te
    writeAspic(diagAspic,"aspoc.inp","aspic")
    }
 }
+

@@ -3,9 +3,9 @@
 \docType{methods}
 \name{readCpue}
 \alias{readCpue}
-\alias{readCpue-method}
 \alias{readCpue,character,character-method}
 \alias{readCpue,character,missing-method}
+\alias{readCpue-method}
 \title{readCpue}
 \usage{
 readCpue(file, method, ...)
@@ -30,3 +30,4 @@ read catch per unit effort data from a variety of stock assessment text files.
    head(udat)
    }
 }
+

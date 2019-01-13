@@ -27,3 +27,12 @@ notifications:
 branches:
   only:
     - master
+
+repos:
+  CRAN: https://cloud.r-project.org
+  flr: http://flr-project.org/R
+
+after_failure:
+  - cat /home/travis/build/flr/diags/diags.Rcheck/00install.out 
+  - cat /home/travis/build/flr/diags/diags.Rcheck/00check.log
+  - ./travis-tool.sh dump_logs
