@@ -19,7 +19,8 @@ Suggests:
     RCurl,
     gam,
     GGally,
-    knitr
+    knitr,
+    corrplot
 VignetteBuilder: knitr
 Collate:
     'diags-2box.R'

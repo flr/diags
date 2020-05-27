@@ -16,7 +16,7 @@ library(knitr)
 ## Global options
 opts_chunk$set(echo    =!TRUE,
                eval    =TRUE,
-               cache   =!FALSE,
+               cache   =FALSE,
                cache.path="cache/",
                prompt  =FALSE,
                comment =NA,
