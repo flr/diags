@@ -24,7 +24,7 @@ qqLine <- function(x,y){
 
  return(res)}
 
-diagsFn=function(res){
+diagsFn<-function(res){
       res$residualLag <- c(res$residual[-1],NA)
    
       try({qq.     <- qqnorm(res$residual,plot.it=FALSE,na.rm=T)

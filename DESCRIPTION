@@ -51,6 +51,8 @@ Collate:
     'jackknife-ss.R'
     'residuals-nr.R'
     'ss-jitter.R'
+    'ss-SRR.R'
     'tmpDir.R'
     'pErr.R'
+    'runASPM.R'
 RoxygenNote: 5.0.1

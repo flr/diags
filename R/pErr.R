@@ -58,68 +58,68 @@
 #' 
 #' 
 #' }
-
-setGeneric('pe',  function(obs,hat,...) standardGeneric('pe'))
-setMethod('pe', signature(obs='FLQuant',hat='FLQuant'), function(obs,hat) {
-        
-   mf =model.frame(FLQuants(obs=obs,hat=hat))
-   nms=names(mf)
-   names(mf)[1]="quant"
-  
-   if (dims(obs)$iter>dims(hat)$iter)
-     hat=propagate(hat,dims(obs)$iter)
-   if (dims(hat)$iter>dims(obs)$iter)
-     obs=propagate(obs,dims(hat)$iter)
-   
-   if (max(dims(obs)$iter,dims(hat)$iter)>1)
-      res=as(t(daply(mf,.(quant,season,unit,area,iter),with, pe(obs,hat))),"FLPar")
-   else
-      res=FLPar(daply(mf,.(quant,season,unit,area,iter),with, pe(obs,hat)),units="NA")
-         
-   res})
-
-setMethod('pe', signature(obs='numeric',hat='numeric'),
-          function(obs,hat) {
-            c(mae   =mae( obs,hat),
-              mape  =mape(obs,hat),
-              mase  =mase(obs,hat),
-              theil =theil(obs,hat),
-              rmse  =rmse(obs,hat),
-              cor   =cor( obs,hat),
-              cov   =cov( obs,hat),
-              sd.obs=var( obs)^0.5,
-              sd.hat=var( hat)^0.5)
-          })
-
-
-mae<-function(obs,hat){
-  t=length(hat)
-  
-  sum(abs(obs-hat))/t}
-
-mape<-function(obs,hat){
-  t=length(hat)
-  
-  sum(abs((obs-hat)/obs))/t}
-
-mase<-function(obs,hat){
-  t=length(hat)
-  
-  sum(abs(obs-hat))/sum(abs(obs[-1]-obs[-length(obs)]))*(t-1)/t}
-
-hmase<-function(obs,hat,h=1){
-  t=length(hat)
-  
-  sum(abs(obs-hat))/sum(abs(obs[-seq(h)]-rev(rev(obs)[-seq(h)])))*(t-h)/t}
-
-rmse<-function(obs,hat){
-  t=length(hat)
-  
-  (sum(((obs-hat)^2)/t))^0.5}
-
-theil<-function(obs,hat){
-  
-  res=(sum(((hat[-1]-obs[-1])/obs[-1])^2)/length(obs))/
-      (sum(((obs[-1]-obs[-length(obs)])/obs[-1])^2)/length(obs))
-  
-  res^0.5}
+# 
+# setGeneric('pe',  function(obs,hat,...) standardGeneric('pe'))
+# setMethod('pe', signature(obs='FLQuant',hat='FLQuant'), function(obs,hat) {
+#         
+#    mf =model.frame(FLQuants(obs=obs,hat=hat))
+#    nms=names(mf)
+#    names(mf)[1]="quant"
+#   
+#    if (dims(obs)$iter>dims(hat)$iter)
+#      hat=propagate(hat,dims(obs)$iter)
+#    if (dims(hat)$iter>dims(obs)$iter)
+#      obs=propagate(obs,dims(hat)$iter)
+#    
+#    if (max(dims(obs)$iter,dims(hat)$iter)>1)
+#       res=as(t(daply(mf,.(quant,season,unit,area,iter),with, pe(obs,hat))),"FLPar")
+#    else
+#       res=FLPar(daply(mf,.(quant,season,unit,area,iter),with, pe(obs,hat)),units="NA")
+#          
+#    res})
+# 
+# setMethod('pe', signature(obs='numeric',hat='numeric'),
+#           function(obs,hat) {
+#             c(mae   =mae( obs,hat),
+#               mape  =mape(obs,hat),
+#               mase  =mase(obs,hat),
+#               theil =theil(obs,hat),
+#               rmse  =rmse(obs,hat),
+#               cor   =cor( obs,hat),
+#               cov   =cov( obs,hat),
+#               sd.obs=var( obs)^0.5,
+#               sd.hat=var( hat)^0.5)
+#           })
+# 
+# 
+# mae<-function(obs,hat){
+#   t=length(hat)
+#   
+#   sum(abs(obs-hat))/t}
+# 
+# mape<-function(obs,hat){
+#   t=length(hat)
+#   
+#   sum(abs((obs-hat)/obs))/t}
+# 
+# mase<-function(obs,hat){
+#   t=length(hat)
+#   
+#   sum(abs(obs-hat))/sum(abs(obs[-1]-obs[-length(obs)]))*(t-1)/t}
+# 
+# hmase<-function(obs,hat,h=1){
+#   t=length(hat)
+#   
+#   sum(abs(obs-hat))/sum(abs(obs[-seq(h)]-rev(rev(obs)[-seq(h)])))*(t-h)/t}
+# 
+# rmse<-function(obs,hat){
+#   t=length(hat)
+#   
+#   (sum(((obs-hat)^2)/t))^0.5}
+# 
+# theil<-function(obs,hat){
+#   
+#   res=(sum(((hat[-1]-obs[-1])/obs[-1])^2)/length(obs))/
+#       (sum(((obs[-1]-obs[-length(obs)])/obs[-1])^2)/length(obs))
+#   
+#   res^0.5}
