@@ -25,7 +25,7 @@
 #' Which has the desirable properties of scale invariance, predictable behaviour, symmetry, interpretability and asymptotic normality
 #' 
 #' The mean absolute scaled error is independent of the scale of the data, so can be used to compare forecasts across data sets with different scales. Behaviour is predictable as $y_{t}\rightarrow 0$] Percentage forecast accuracy measures such as the Mean absolute percentage error (MAPE) rely on division of $y_{t}$, skewing the distribution of the MAPE for values of $y_{t}$ near or equal to 0. This is especially problematic for data sets whose scales do not have a meaningful 0, such as temperature in Celsius or Fahrenheit, and for intermittent demand data sets, where $y_{t}=0$  occurs frequently.
-#' Symmetry since The mean absolute scaled error penalises positive and negative forecast errors equally, and penalises errors in large forecasts and small forecasts equally. In contrast, the MAPE  fail both of these criteria. The mean absolute scaled error can be easily interpreted, as values greater than one indicate that in-sample one-step forecasts from the naïve method perform better than the forecast values under consideration.The Diebold-Mariano test for one-step forecasts is used to test the statistical significance of the difference between two sets of forecasts. To perform hypothesis testing with the Diebold-Mariano test statistic, it is desirable for DM = N (0, 1) $DM\sim N(0,1)$ , where $DM$ is the value of the test statistic. The DM statistic for the MASE has been empirically shown to approximate this distribution, while the mean relative absolute error (MRAE), MAPE and sMAPE do not.
+#' Symmetry since The mean absolute scaled error penalises positive and negative forecast errors equally, and penalises errors in large forecasts and small forecasts equally. In contrast, the MAPE  fail both of these criteria. The mean absolute scaled error can be easily interpreted, as values greater than one indicate that in-sample one-step forecasts from the na??ve method perform better than the forecast values under consideration.The Diebold-Mariano test for one-step forecasts is used to test the statistical significance of the difference between two sets of forecasts. To perform hypothesis testing with the Diebold-Mariano test statistic, it is desirable for DM = N (0, 1) $DM\sim N(0,1)$ , where $DM$ is the value of the test statistic. The DM statistic for the MASE has been empirically shown to approximate this distribution, while the mean relative absolute error (MRAE), MAPE and sMAPE do not.
 #' 
 #' Another measure is Theil's $U$\\
 #'   
@@ -39,7 +39,7 @@
 #' 
 #'   Altough the methods have their limitations, they are simple tools for evaluating forecast accuracy that can be used without knowing anything about the forecast except the past values of a forecast.
 #' 
-#'  Just because a forecast has been accurate in the past, however, does not mean it will be accurate in the future. Over fitting may make the forecast less accurate and there is always the possibility of an event occurring that the model cannot anticipate, a black swan event. When this happens, you don’t know how big the error will be. Errors associated with these events are not typical errors, which is what the statistics above try to measure. So, while forecast accuracy can tell us a lot about the past, remember these limitations when using forecasts to predict the future.
+#'  Just because a forecast has been accurate in the past, however, does not mean it will be accurate in the future. Over fitting may make the forecast less accurate and there is always the possibility of an event occurring that the model cannot anticipate, a black swan event. When this happens, you don???t know how big the error will be. Errors associated with these events are not typical errors, which is what the statistics above try to measure. So, while forecast accuracy can tell us a lot about the past, remember these limitations when using forecasts to predict the future.
 #' 
 #' @name pe
 #' 
@@ -58,7 +58,6 @@
 #' 
 #' 
 #' }
-<<<<<<< HEAD
 # 
 # setGeneric('pe',  function(obs,hat,...) standardGeneric('pe'))
 # setMethod('pe', signature(obs='FLQuant',hat='FLQuant'), function(obs,hat) {
@@ -124,7 +123,6 @@
 #       (sum(((obs[-1]-obs[-length(obs)])/obs[-1])^2)/length(obs))
 #   
 #   res^0.5}
-=======
 
 setGeneric('pe',  function(obs,hat,...) standardGeneric('pe'))
 setMethod('pe', signature(obs='FLQuant',hat='FLQuant'), function(obs,hat) {
