@@ -1,4 +1,4 @@
-spFuncJabba<function(x){
+spFuncJabba<-function(x){
   dat=x$inputseries$catch
   names(dat)[1:2]=c("year","catch")
   dat$biomass=x$timeseries[,"mu","B"][as.character(dat$year)]
