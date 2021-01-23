@@ -188,4 +188,3 @@ theil<-function(obs,hat){
       (sum(((obs[-1]-obs[-length(obs)])/obs[-1])^2)/length(obs))
   
   res^0.5}
->>>>>>> 4565b79fdd058c756f13e877f6b06da95da8ebb2
