@@ -25,7 +25,7 @@
 #' Which has the desirable properties of scale invariance, predictable behaviour, symmetry, interpretability and asymptotic normality
 #' 
 #' The mean absolute scaled error is independent of the scale of the data, so can be used to compare forecasts across data sets with different scales. Behaviour is predictable as $y_{t}\rightarrow 0$] Percentage forecast accuracy measures such as the Mean absolute percentage error (MAPE) rely on division of $y_{t}$, skewing the distribution of the MAPE for values of $y_{t}$ near or equal to 0. This is especially problematic for data sets whose scales do not have a meaningful 0, such as temperature in Celsius or Fahrenheit, and for intermittent demand data sets, where $y_{t}=0$  occurs frequently.
-#' Symmetry since The mean absolute scaled error penalises positive and negative forecast errors equally, and penalises errors in large forecasts and small forecasts equally. In contrast, the MAPE  fail both of these criteria. The mean absolute scaled error can be easily interpreted, as values greater than one indicate that in-sample one-step forecasts from the naïve method perform better than the forecast values under consideration.The Diebold-Mariano test for one-step forecasts is used to test the statistical significance of the difference between two sets of forecasts. To perform hypothesis testing with the Diebold-Mariano test statistic, it is desirable for $DM ∼ N ( 0 , 1 )$ $DM\sim N(0,1)$ , where $DM$ is the value of the test statistic. The DM statistic for the MASE has been empirically shown to approximate this distribution, while the mean relative absolute error (MRAE), MAPE and sMAPE do not.
+#' Symmetry since The mean absolute scaled error penalises positive and negative forecast errors equally, and penalises errors in large forecasts and small forecasts equally. In contrast, the MAPE  fail both of these criteria. The mean absolute scaled error can be easily interpreted, as values greater than one indicate that in-sample one-step forecasts from the naïve method perform better than the forecast values under consideration.The Diebold-Mariano test for one-step forecasts is used to test the statistical significance of the difference between two sets of forecasts. To perform hypothesis testing with the Diebold-Mariano test statistic, it is desirable for DM = N (0, 1) $DM\sim N(0,1)$ , where $DM$ is the value of the test statistic. The DM statistic for the MASE has been empirically shown to approximate this distribution, while the mean relative absolute error (MRAE), MAPE and sMAPE do not.
 #' 
 #' Another measure is Theil's $U$\\
 #'   
@@ -58,6 +58,7 @@
 #' 
 #' 
 #' }
+<<<<<<< HEAD
 # 
 # setGeneric('pe',  function(obs,hat,...) standardGeneric('pe'))
 # setMethod('pe', signature(obs='FLQuant',hat='FLQuant'), function(obs,hat) {
@@ -123,3 +124,70 @@
 #       (sum(((obs[-1]-obs[-length(obs)])/obs[-1])^2)/length(obs))
 #   
 #   res^0.5}
+=======
+
+setGeneric('pe',  function(obs,hat,...) standardGeneric('pe'))
+setMethod('pe', signature(obs='FLQuant',hat='FLQuant'), function(obs,hat) {
+        
+   mf =model.frame(FLQuants(obs=obs,hat=hat))
+   nms=names(mf)
+   names(mf)[1]="quant"
+  
+   if (dims(obs)$iter>dims(hat)$iter)
+     hat=propagate(hat,dims(obs)$iter)
+   if (dims(hat)$iter>dims(obs)$iter)
+     obs=propagate(obs,dims(hat)$iter)
+   
+   if (max(dims(obs)$iter,dims(hat)$iter)>1)
+      res=as(t(daply(mf,.(quant,season,unit,area,iter),with, pe(obs,hat))),"FLPar")
+   else
+      res=FLPar(daply(mf,.(quant,season,unit,area,iter),with, pe(obs,hat)),units="NA")
+         
+   res})
+
+setMethod('pe', signature(obs='numeric',hat='numeric'),
+          function(obs,hat) {
+            c(mae   =mae( obs,hat),
+              mape  =mape(obs,hat),
+              mase  =mase(obs,hat),
+              theil =theil(obs,hat),
+              rmse  =rmse(obs,hat),
+              cor   =cor( obs,hat),
+              cov   =cov( obs,hat),
+              sd.obs=var( obs)^0.5,
+              sd.hat=var( hat)^0.5)
+          })
+
+
+mae<-function(obs,hat){
+  t=length(hat)
+  
+  sum(abs(obs-hat))/t}
+
+mape<-function(obs,hat){
+  t=length(hat)
+  
+  sum(abs((obs-hat)/obs))/t}
+
+mase<-function(obs,hat){
+  t=length(hat)
+  
+  sum(abs(obs-hat))/sum(abs(obs[-1]-obs[-length(obs)]))*(t-1)/t}
+
+hmase<-function(obs,hat,h=1){
+  t=length(hat)
+  
+  sum(abs(obs-hat))/sum(abs(obs[-seq(h)]-rev(rev(obs)[-seq(h)])))*(t-h)/t}
+
+rmse<-function(obs,hat){
+  t=length(hat)
+  
+  (sum(((obs-hat)^2)/t))^0.5}
+
+theil<-function(obs,hat){
+  
+  res=(sum(((hat[-1]-obs[-1])/obs[-1])^2)/length(obs))/
+      (sum(((obs[-1]-obs[-length(obs)])/obs[-1])^2)/length(obs))
+  
+  res^0.5}
+>>>>>>> 4565b79fdd058c756f13e877f6b06da95da8ebb2
