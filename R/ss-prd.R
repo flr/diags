@@ -175,34 +175,33 @@ spFunc<-function(x,add=FALSE,col2="blue",labels=c("","","biomass","Surplus Produ
   
   invisible(data.frame(year=seq(length(Bio_agg)),biomass=Bio_agg, sp=sprod, catch=catch_agg,ssb=ddply(ts,.(Yr),with, sum(SpawnBio,na.rm=TRUE))[,2]))}
 
-smrySS.1<-function(x,covar=TRUE,forecast=TRUE,ncols=320,parallel=FALSE){
+smrySS<-function(x,covar=TRUE,forecast=TRUE,ncols=320){
   
-  runs=maply(x, function(x) if (file.exists(x)) runs=getFile(x) else runs=getFile(x))
-  names(runs)=NULL
+  #if ("character"%in%is(x)) names(x)=1
+  #if (require(doParallel)&require(foreach))
+  #  ss=foreach(run=x, .combine='list', .multicombine=TRUE, .packages=c("r4ss"), .export=c("covar","forecast","ncols")) %dopar% 
+  #      getSS(run,covar=covar,forecast=forecast,ncols=ncols)  
+  #else
+  if (is.null((names(x)))) names(x)=seq(length(x))
+  ss=mlply(data.frame(run=x), function(run) getSS(run,covar=covar,forecast=forecast,ncols=ncols))
   
-  if (parallel)
-    ss=foreach(run=x, .combine='list', .multicombine=TRUE, .packages=c("r4ss")) %dopar% 
-          getSS(file,covar=covar,forecast=forecast,ncols=ncols)
-  else
-    ss=mlply(x, getSS,covar=covar,forecast=forecast,ncols=ncols)
-  
-  ts=mdply(seq(length(ss)), function(x) cbind(run=runs[x],getTs(ss[[x]])))[,-1]
-  pf=mdply(seq(length(ss)), function(x) cbind(run=runs[x],getPellaT(ss[[x]])))[,-1]
-  rf=mdply(seq(length(ss)), function(x) cbind(run=runs[x],getRf(ss[[x]])))[,-1]
-  ll=mdply(seq(length(ss)), function(x) cbind(run=runs[x],t(getAic(ss[[x]])),grad=ss[[x]]$maximum_gradient_component))[,-1]
-  sp=mdply(seq(length(ss)), function(x) cbind(run=runs[x],spFunc(ss[[x]])))[,-1]
-  pt=mdply(seq(length(ss)), function(x) cbind(run=runs[x],getPellaT(ss[[x]])))[,-1]
+  ts=mdply(seq(length(ss)), function(x) getTs(ss[[x]]))
+  pf=mdply(seq(length(ss)), function(x) getPellaT(ss[[x]]))
+  rf=mdply(seq(length(ss)), function(x) getRf(ss[[x]]))
+  ll=mdply(seq(length(ss)), function(x) cbind(t(getAic(ss[[x]])),grad=ss[[x]]$maximum_gradient_component))
+  sp=mdply(seq(length(ss)), function(x) spFunc(ss[[x]]))
+  pt=mdply(seq(length(ss)), function(x) getPellaT(ss[[x]]))
   kb=mdply(seq(length(ss)), function(x){
        names(ss[[x]]$Kobe)=c("year","stock","harvest")
        mj=ss[[x]]$derived_quants[,1:3]
        mj=subset(mj,Label%in%c("Bratio_2014","SSB_Unfished","SSB_MSY","F_2014"))
        bmsy=subset(mj,Label=="SSB_MSY")[,2]
        if (("SSB_Unfished"%in%mj$Label)) k=subset(mj,Label=="SSB_Unfished")[,2] else k=NA 
-       cbind(run=runs[x],transform(ss[[x]]$Kobe,stock.lim=stock*bmsy/k))})[,-1]
+         transform(ss[[x]]$Kobe,stock.lim=stock*bmsy/k)})
   dg=mdply(seq(length(ss)), function(x){
     u=ss[[x]]$cpue[,c("Fleet_name","Yr","Seas","Obs","Exp","Dev")]
     names(u)=c("name","year","season","obs","hat","residual")
-    cbind(run=runs[x],u)})[,-1]
+    u})
   
   if (!is.null(attributes(x)$split_labels)){
     ts=cbind(attributes(x)$split_labels[ts$.id,],ts)
@@ -215,7 +214,14 @@ smrySS.1<-function(x,covar=TRUE,forecast=TRUE,ncols=320,parallel=FALSE){
     dg=cbind(attributes(x)$split_labels[dg$.id,],dg)
   }
     
-  return(list(ts=ts,refpts=rf,pfunc=transform(pf,m=1+p),ll=ll,sp=sp,pt=pt,kb=kb,dg=dg))}
+  return(list(ts    =cbind(run=ts$X1,ts)[,-2],
+              refpts=cbind(run=rf$X1,rf)[,-2],
+              pfunc =cbind(run=pf$X1,pf,m=1+pf$p)[,-2],
+              ll    =cbind(run=ll$X1,ll)[,-2],
+              sp    =cbind(run=sp$X1,sp)[,-2],
+              pt    =cbind(run=pt$X1,pt)[,-2],
+              kb    =cbind(run=kb$X1,kb)[,-2],
+              dg    =cbind(run=dg$X1,dg)[,-2]))}
 
 parSS<-function(x,trace=FALSE){
   
