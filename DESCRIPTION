@@ -59,7 +59,6 @@ Collate:
     'JABBAv1.4beta-function.R'
     'Jitter_DC.r'
     'Run_ASPM.r'
-    'jabba-com.R'
     'jabba.R'
     'jabbaFn.R'
     'jabbaHcst.R'
