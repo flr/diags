@@ -114,4 +114,4 @@ EqSim<-function(stk,fbar=seq(0, 4, length=101), nsamp=2000,
                lFmsy=lFmsy, uFmsy=uFmsy, F05=F05,
                units=c("t", "f", rep("t", 2), rep("f", 4), rep("t", 3)))
   
-  #return(refpts)}
+  return(refpts)}
