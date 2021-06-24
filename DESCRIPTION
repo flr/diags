@@ -75,4 +75,5 @@ Collate:
     'ss-prd.R'
     'ss2jabba.R'
     'xval.R'
+    'EqSim.R'
 RoxygenNote: 6.1.1
