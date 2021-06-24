@@ -36,7 +36,7 @@ plot_lnorm<-function(mu,CV,Prior="x"){
 #-----------
 # FUNCTIONS
 #-----------
-cat(paste0("\n","><> Prepare JABBA prior inputs <><","\n"))
+#cat(paste0("\n","><> Prepare JABBA prior inputs <><","\n"))
 
 #--------------------------------------------------
 # Function to get beta prior parameters

@@ -1,4 +1,4 @@
-required(msy)
+require(msy)
 
 EqSim<-function(stk,fbar=seq(0, 4, length=101), nsamp=2000, 
                 bio.years=c(-4,-0) + dims(stk)$maxyear,
