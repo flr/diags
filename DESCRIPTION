@@ -20,7 +20,8 @@ Suggests:
     gam,
     GGally,
     knitr,
-    corrplot
+    corrplot,
+    rmarkdown
 VignetteBuilder: knitr
 Collate:
     'diags-2box.R'
