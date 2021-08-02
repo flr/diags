@@ -1,117 +1,91 @@
-require(msy)
 
-EqSim<-function(stk,fbar=seq(0, 4, length=101), nsamp=2000, 
-                bio.years=c(-4,-0) + dims(stk)$maxyear,
-                sel.years=c(-4,-0) + dims(stk)$maxyear,
-                remove.years=NULL, 
-                pa=0.2, Fcv=0.212, Fphi=0.423,
-                Fs=seq(0,4,length.out=101)){
+eqSim<-function(object, 
+                #Blim, Bpa=Blim*exp(1.645*0.2), Btrigger=Bpa, 
+                Blim    =c("Blim"=unlist(c(object@frp["Blim"]))),
+                Bpa     =unlist(c(object@frp["Bpa"])),
+                Btrigger=unlist(c(object@frp["Btrigger"])),
+                Fmsy    =unlist(c(object@frp["Fmsy"])),
+                Fscan   ="missing", 
+                Fcv=0.212,   Fphi=0.423, 
+                bio.years=3, bio.const=FALSE, 
+                sel.years=3, sel.const=FALSE, 
+                verbose=FALSE, process.error=TRUE, Nrun=200, nsamp=1000,
+                rhologRec=TRUE, SSBcv=0, 
+                extreme.trim=c(0.05,0.95)){
+  
+  stk=trim(object, year=c(range(object)["minyear"]:range(object)["maxyear"]))
+  
+  ####Create the Hockey stick SR with Blim
+  segreg3<-function(ab, ssb) log(ifelse(ssb >= Blim, ab$a * Blim, ab$a * ssb))
+  
+  segreg3<<-segreg3
+  Blim<<-Blim
+  
+  #Fit the SR data using only segreg3 model (HS at blim)
+  FIT=eqsr_fit(stk, nsamp=nsamp, models = c("segreg3"))
+  
+  
+  #Fit the SR data with the 3 models combined 
+  #FIT <- eqsr_fit(stk, nsamp = 1000, models = c("Bevholt", "Ricker","Segreg"))
+  #FIT <- eqsr_fit(Herring, nsamp = 1000, models = c("Bevholt"))
+  
+  #Define the F range to which run the simulations
+  if (missing(Fscan))
+    Fscan = seq(0,2,len=60)
+  
+  #Setting the the biology and selectivity
+  bio.years=c(range(stk)["maxyear"]-bio.years+1,range(stk)["maxyear"])
+  sel.years=c(range(stk)["maxyear"]-sel.years+1,range(stk)["maxyear"])
+  
+  ##STEP 1 with Segmented Regression with breakpoint at Blim
+  SIM=eqsim_run(FIT, 
+                bio.years=bio.years, bio.const=bio.const, 
+                sel.years=sel.years, sel.const=sel.const, 
+                Fcv=Fcv, Fphi=Fphi, 
+                Blim=Blim, Bpa=Btrigger, 
+                Fscan=Fscan, 
+                verbose=verbose, 
+                process.error=process.error, 
+                Nrun=Nrun, 
+                Btrigger=Btrigger,
+                rhologRec=rhologRec, SSBcv=SSBcv, 
+                extreme.trim=extreme.trim)
+  
+  #Create a table with the reference points 
+  #t(SIM$refs_interval)
+  
+  #Estimate the catch at the equilibrium for a given F
+  #SIM$rbp$p50[SIM$rbp$variable=="Catch"]
+  
+  ##Interpolate to get equilbrium catches
+  Catch_50perc=approx(Fscan, SIM$rbp$p50[SIM$rbp$variable=="Catch"], xout=seq(min(Fscan),max(Fscan),length=40))
+  
+  Catchequi=Catch_50perc$y[which.min(abs(Catch_50perc$x - Fmsy))]
+  ## where Fmsy is the preliminary Fmsy value identified in Step 1 above
+  
+  ##Interpolate to get this for more F values:
+  BF_50perc1=approx(Fscan, SIM$rbp$p50[SIM$rbp$variable=="Spawning stock biomass"], xout=seq(min(Fscan),max(Fscan),length=1000))
+  
+  #Estimate B0 and BMSY
+  F.0 = 0
+  Bmsy=BF_50perc1$y[which.min(abs(BF_50perc1$x - Fmsy))]
+  B0  =BF_50perc1$y[which.min(abs(BF_50perc1$x - F.0))]
+  Flim=BF_50perc1$x[which.min(abs(BF_50perc1$y-Blim))]
+  
+  rtn=FLPar(c(Catchequi     =Catchequi,
+              Bmsy          =Bmsy,
+              B0            =B0,
+              Flim          =Flim,
+              unlist(c(SIM$refs_interval["FmsyMedianC"])),
+              unlist(c(SIM$refs_interval["FmsyMedianL"])),
+              unlist(c(SIM$refs_interval["F5percRiskBlim"]))))
+  
+  rtn}
 
-  #args=list(fbar=seq(0, 4, length=101), nsamp=2000, 
-  #          bio.years=c(-4,-0) + dims(stk)$maxyear,
-  #          sel.years=c(-4,-0) + dims(stk)$maxyear,
-  #          remove.years=NULL, 
-  #          pa=0.2, Fcv=0.212, Fphi=0.423,
-  #          Fs=seq(0,4,length.out=101))  
-  #attach(args)
+if(FALSE){
+  library("future.apply")
+  plan(multisession)
   
-  # Fit all SRR models
-  #srfit0=eqsr_fit(stk, nsamp=nsamp, models=c("Segreg","Bevholt"))
-  
-  # segreg to obtain Blim & Bpa 
-  srfit1=eqsr_fit(stk, nsamp=nsamp, models="Segreg")
-  Blim  =srfit1[["sr.det"]][,"b"]
-  Bpa   =Blim*exp(1.645*pa)
-  
-  # get Flim by simulating for 10 years with Fcv=Fphi=0, Btrigger=0
-  srsim1=eqsim_run(srfit1,
-                   bio.years = bio.years, sel.years = sel.years,
-                   Fcv = 0, Fphi = 0,
-                   Btrigger=0, Blim = Blim, Bpa = Bpa,
-                   Fscan = Fs,
-                   verbose = FALSE)
-  
-  Flim=srsim1$Refs2["catF", "F50"]
-  Fpa =Flim/pa
-  
-  # fit and remove last remove.years
-  srfit2 <- eqsr_fit(stk, nsamp = nsamp,
-                     models = "Segreg",
-                     remove.years=remove.years)
-  
-  srsim2 <- eqsim_run(srfit2,
-                      bio.years = bio.years, sel.years = sel.years,
-                      bio.const = FALSE, sel.const = FALSE,
-                      Fcv=Fcv, Fphi=Fphi,
-                      Btrigger=0, Blim=Blim, Bpa=Bpa,
-                      Fscan = Fs,
-                      verbose = FALSE)
-  
-  cFmsy=srsim2$Refs2["lanF", "medianMSY"]
-  F05  =srsim2$Refs2["catF", "F05"]
-  
-  # Btrigger
-  srsim3 <- eqsim_run(srfit2,
-                      bio.years = bio.years, sel.years = sel.years,
-                      bio.const = FALSE, sel.const = FALSE,
-                      Fcv = 0, Fphi = 0,
-                      Btrigger=0, Blim=Blim, Bpa=Bpa,
-                      Fscan   =Fs,
-                      verbose =FALSE)
-  
-  # Btrigger < Bpa -> Bpa
-  x        =srsim3$rbp[srsim3$rbp$variable=="Spawning stock biomass", ]
-  cBtrigger=x[which(abs(x$Ftarget - cFmsy) == min(abs(x$Ftarget - cFmsy))), "p05"]
-  
-  # F05
-  srsim4 <- eqsim_run(srfit2,
-                      bio.years = bio.years, sel.years = sel.years,
-                      bio.const = FALSE, sel.const = FALSE,
-                      Fcv=0.212, Fphi=0.423,
-                      Btrigger=cBtrigger, Blim = Blim, Bpa = Bpa,
-                      Fscan = seq(0, 1.2, len = 40),
-                      verbose = FALSE)
-  
-  F05 <- srsim4$Refs2["catF", "F05"]
-  
-  # If F05 < Fmsy, then Fmsy = F05
-  if(cFmsy > F05){ 
-    Fmsy <- F05
-  } else {
-    Fmsy <- cFmsy}
-  
-  # IF Btrigger < Bpa, then Btrigger = Bpa, then redo srsim4
-  # OR IF Fbar 5yr != Fmsy
-  
-  if(cBtrigger < Bpa | all(tail(fbar(stk), 5) > Fmsy)) {
-    
-    Btrigger <- Bpa
-    
-    srsim4 <- eqsim_run(srfit2,
-                        bio.years = bio.years, sel.years = sel.years,
-                        bio.const = FALSE, sel.const = FALSE,
-                        Fcv=0.212, Fphi=0.423,
-                        Btrigger=Btrigger, Blim = Blim, Bpa = Bpa,
-                        Fscan = seq(0, 1.2, len = 40),
-                        verbose = FALSE)
-    
-    cFmsy <- srsim4$Refs2["lanF", "medianMSY"]
-    F05 <- srsim4$Refs2["catF", "F05"]
-    
-    # If F05 < Fmsy, then Fmsy = F05
-    if(cFmsy > F05) {
-      Fmsy <- F05
-    }}
-  
-  # FMSY (low - upp) w/o Btrigger
-  lFmsy <- srsim3$Refs2["lanF", "Medlower"]
-  uFmsy <- srsim3$Refs2["lanF", "Medupper"]
-  
-  ##### Refpts!
-  refpts=FLPar(Btrigger=Btrigger, Fmsy=Fmsy, 
-               Blim=Blim, Bpa=Bpa,
-               Flim=Flim, Fpa=Fpa, 
-               lFmsy=lFmsy, uFmsy=uFmsy, F05=F05,
-               units=c("t", "f", rep("t", 2), rep("f", 4), rep("t", 3)))
-  
-  return(refpts)}
+  res   =future_lapply(BalticSea, FUN=eqSim)
+  eqsims=ldply(res,model.frame)
+}

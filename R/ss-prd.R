@@ -182,8 +182,12 @@ smrySS<-function(x,covar=TRUE,forecast=TRUE,ncols=320){
   #  ss=foreach(run=x, .combine='list', .multicombine=TRUE, .packages=c("r4ss"), .export=c("covar","forecast","ncols")) %dopar% 
   #      getSS(run,covar=covar,forecast=forecast,ncols=ncols)  
   #else
-  if (is.null((names(x)))) names(x)=seq(length(x))
-  ss=mlply(data.frame(run=x), function(run) getSS(run,covar=covar,forecast=forecast,ncols=ncols))
+  
+  if ("list"%in%is(x)&"Data_File"%in%names(x)) ss=list(x) else 
+    if ("list"%in%is(x)&"Data_File"%in%names(x[[1]])) ss=x else
+       if (is.null((names(x)))) {
+         names(x)=seq(length(x))
+         ss=mlply(data.frame(run=x), function(run) getSS(run,covar=covar,forecast=forecast,ncols=ncols))}
   
   ts=mdply(seq(length(ss)), function(x) getTs(ss[[x]]))
   pf=mdply(seq(length(ss)), function(x) getPellaT(ss[[x]]))
