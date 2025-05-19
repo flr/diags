@@ -36,7 +36,6 @@ Collate:
     'readU-MFCL.R'
     'readU-SS.R'
     'readU-VPASuite.R'
-    'summary.R'
     'writeU-BSP.R'
     'writeU-methods.R'
     'writeU-VPASuite.R'
