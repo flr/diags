@@ -5,14 +5,13 @@ utils::globalVariables(c("ddply"))
 utils::globalVariables(c("."))
 utils::globalVariables(c("diagsFn"))
 
-.diagUss=function(x,ncols=320){
+.diagUss=function(x){
   res=subset(SS_output(x, forecast  =FALSE, 
                           covar     =FALSE,
-                          checkcor  =FALSE,
                           verbose   =FALSE, 
                           printstats=FALSE, 
                           hidewarn  =TRUE, 
-                          NoCompOK  =TRUE,ncols=ncols)$cpue, !is.na(Dev),select=c(Fleet_name,Yr,Seas,Obs,Exp,Dev,SE))
+                          NoCompOK  =TRUE)$cpue, !is.na(Dev),select=c(Fleet_name,Yr,Seas,Obs,Exp,Dev,SE))
   
 
   names(res)=c("name","year","season","obs","hat","residual","se")
